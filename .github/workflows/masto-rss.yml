@@ -1,0 +1,20 @@
+name: Masto-rss
+
+on:
+  push:
+   branches: [ main ]
+  pull_request:
+    branches: [ main ]
+      
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build & Push Image
+      run: |
+        echo "${{ secrets.DH_PASSWORD }}" | docker login -u "amitserper" --password-stdin
+        docker build -t amitserper/masto-rss .
+        docker push amitserper/masto-rss
