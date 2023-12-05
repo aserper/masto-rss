@@ -11,8 +11,8 @@ MASTODON_INSTANCE_URL = os.environ['MASTODON_INSTANCE_URL']
 # RSS feed URL
 RSS_FEED_URL = os.environ['RSS_FEED_URL']
 
-# File to store the processed entry URLs
-PROCESSED_ENTRIES_FILE = 'processed_entries.txt'
+# File to store the processed entry URLs. Note that /state directory is for the docker setup
+PROCESSED_ENTRIES_FILE = '/state/processed_entries.txt'
 
 # Time delay between RSS checks (in seconds)
 CHECK_INTERVAL = os.environ['CHECK_INTERVAL']  # Check interval in seconds
