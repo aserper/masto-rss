@@ -2,6 +2,7 @@
 # Masto-rss
 
 A simple Mastodon bot written in python that posts updates from an RSS feed to a Mastodon account.
+Updates from the RSS feeds that were already posted will be saved to "processed_entries.txt" to prevent double posting.
 
 This project is meant to be built to a docker container, so all of the options need to be set as environment variables:
 
