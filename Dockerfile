@@ -1,5 +1,5 @@
 # Use an appropriate base image with Python pre-installed
-FROM python:3.8-slim
+FROM alpine:3.18
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -8,7 +8,10 @@ WORKDIR /app
 COPY . /app
 
 # Install any Python dependencies
+
+RUN apk add python3
+RUN apk add py3-pip
 RUN pip install -r requirements.txt
 
-# Run your Python script
+# Run Python script
 CMD ["python", "main.py"]
