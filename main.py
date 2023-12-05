@@ -58,7 +58,7 @@ def check_and_post_new_items():
                 status = f"\n{entry.title}\n\n{entry.link}"
 
                 # Post the status to Mastodon
-                mastodon.status_post(status)
+                mastodon.status_post(status, visibility="unlisted")
 
                 # Add the entry URL to the processed_entries set
                 processed_entries.add(entry_url)
