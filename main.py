@@ -1,6 +1,7 @@
 import feedparser
 from mastodon import Mastodon
 import os
+import time
 # Replace these with your Mastodon application details and access token
 MASTODON_CLIENT_ID = os.environ['MASTODON_CLIENT_ID']
 MASTODON_CLIENT_SECRET = os.environ['MASTODON_CLIENT_SECRET']
