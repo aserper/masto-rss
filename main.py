@@ -68,7 +68,7 @@ def check_and_post_new_items():
 
         print("Sleeping for", CHECK_INTERVAL, "seconds...")
         # Wait for the specified interval before checking again
-        time.sleep(CHECK_INTERVAL)
+        time.sleep(int(CHECK_INTERVAL))
 
 if __name__ == "__main__":
     check_and_post_new_items()
