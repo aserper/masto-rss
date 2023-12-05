@@ -55,7 +55,7 @@ def check_and_post_new_items():
             if entry_url not in processed_entries:
                 print(f"Found a new RSS item: {entry.title}")
                 # Create a Mastodon status
-                status = f"New RSS item:\n{entry.title}\n\n{entry.link}"
+                status = f"\n{entry.title}\n\n{entry.link}"
 
                 # Post the status to Mastodon
                 mastodon.status_post(status)
