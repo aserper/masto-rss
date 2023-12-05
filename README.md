@@ -13,4 +13,7 @@ MASTODON_ACCESS_TOKEN = <Mastodon access token>
 
 MASTODON_INSTANCE_URL = <Mastodon instance URL>
 
-RSS_FEED_URL = < URL of RSS/xml feed >
+RSS_FEED_URL = <URL of RSS/xml feed>
+
+
+![image](https://github.com/aserper/masto-rss/actions/workflows/masto-rss.yml/badge.svg)
