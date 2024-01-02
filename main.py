@@ -7,7 +7,7 @@ MASTODON_CLIENT_ID = os.environ['MASTODON_CLIENT_ID']
 MASTODON_CLIENT_SECRET = os.environ['MASTODON_CLIENT_SECRET']
 MASTODON_ACCESS_TOKEN = os.environ['MASTODON_ACCESS_TOKEN']
 MASTODON_INSTANCE_URL = os.environ['MASTODON_INSTANCE_URL']
-
+TOOT_VISIBILITY = os.environ['TOOT_VISIBILITY']
 # RSS feed URL
 RSS_FEED_URL = os.environ['RSS_FEED_URL']
 
@@ -58,7 +58,7 @@ def check_and_post_new_items():
                 status = f"\n{entry.title}\n\n{entry.link}"
 
                 # Post the status to Mastodon
-                mastodon.status_post(status)
+                mastodon.status_post(status, visibility=TOOT_VISIBILITY)
 
                 # Add the entry URL to the processed_entries set
                 processed_entries.add(entry_url)
