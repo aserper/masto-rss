@@ -7,7 +7,7 @@ MASTODON_CLIENT_ID = os.environ['MASTODON_CLIENT_ID']
 MASTODON_CLIENT_SECRET = os.environ['MASTODON_CLIENT_SECRET']
 MASTODON_ACCESS_TOKEN = os.environ['MASTODON_ACCESS_TOKEN']
 MASTODON_INSTANCE_URL = os.environ['MASTODON_INSTANCE_URL']
-TOOT_VISIBILITY = os.environ['TOOT_VISIBILITY']
+TOOT_VISIBILITY = os.environ['TOOT_VISIBILITY'] # Toot visibility ('public', 'unlisted', 'private', or 'direct')
 # RSS feed URL
 RSS_FEED_URL = os.environ['RSS_FEED_URL']
 
