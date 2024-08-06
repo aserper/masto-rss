@@ -22,7 +22,7 @@ python-dateutil==2.8.2
     # via mastodon-py
 python-magic==0.4.27
     # via mastodon-py
-requests==2.31.0
+requests==2.32.2
     # via mastodon-py
 sgmllib3k==1.0.0
     # via feedparser
