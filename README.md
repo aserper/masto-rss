@@ -21,6 +21,6 @@ CHECK_INTERVAL = interval when script checks for new items in seconds (default 3
 
 MAX_HISTORY_SIZE = how many history lines the script needs to keep
 
-The best way to use this project is by using [its docker container](https://hub.docker.com/r/amitserper/masto-rss)
+The best way to use this project is by using a docker container.
 When using docker, make a bind mount between /state on the container to whatever directory you want on your machine in order to keep the state of the feeds that were already posted
 
