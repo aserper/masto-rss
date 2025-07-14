@@ -17,6 +17,10 @@ TOOT_VISIBILITY = 'public', 'unlisted', 'private', or 'direct'
 
 MASTO_RSS_HASHTAGS = Hashtags you want to add
 
+CHECK_INTERVAL = interval when script checks for new items in seconds (default 3600s)
+
+MAX_HISTORY_SIZE = how many history lines the script needs to keep
+
 The best way to use this project is by using [its docker container](https://hub.docker.com/r/amitserper/masto-rss)
 When using docker, make a bind mount between /state on the container to whatever directory you want on your machine in order to keep the state of the feeds that were already posted
 ![image](https://github.com/aserper/masto-rss/actions/workflows/masto-rss.yml/badge.svg)
