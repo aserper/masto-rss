@@ -13,11 +13,9 @@ MASTODON_INSTANCE_URL = os.environ.get('MASTODON_INSTANCE_URL')
 RSS_FEED_URL = os.environ.get('RSS_FEED_URL')
 
 # Optionele configuratie met standaardwaarden
-TOOT_VISIBILITY = os.environ.get('TOOT_VISIBILITY', 'public') # Standaard op 'public'
-CHECK_INTERVAL = int(os.environ.get('CHECK_INTERVAL', 3600)) # Standaard op 1 uur (3600s)
+TOOT_VISIBILITY = os.environ.get('TOOT_VISIBILITY', 'public')
+CHECK_INTERVAL = int(os.environ.get('CHECK_INTERVAL', 3600))
 HASHTAGS = os.environ.get('MASTO_RSS_HASHTAGS', '') 
-
-# NIEUW: Limiteer de grootte van de statefile om te voorkomen dat deze oneindig groeit.
 MAX_HISTORY_SIZE = int(os.environ.get('MAX_HISTORY_SIZE', 500))
 
 # Bestand om de verwerkte entry-URL's op te slaan.
@@ -26,7 +24,6 @@ PROCESSED_ENTRIES_FILE = '/state/processed_entries.txt'
 # Controleer of alle benodigde configuratie aanwezig is
 if not all([MASTODON_CLIENT_ID, MASTODON_CLIENT_SECRET, MASTODON_ACCESS_TOKEN, MASTODON_INSTANCE_URL, RSS_FEED_URL]):
     print("Fout: Niet alle vereiste omgevingsvariabelen zijn ingesteld.")
-    print("Zorg ervoor dat MASTODON_CLIENT_ID, MASTODON_CLIENT_SECRET, MASTODON_ACCESS_TOKEN, MASTODON_INSTANCE_URL, en RSS_FEED_URL zijn ingesteld.")
     exit(1)
 
 # --- Mastodon Initialisatie ---
@@ -50,9 +47,7 @@ def load_processed_entries():
     os.makedirs(os.path.dirname(PROCESSED_ENTRIES_FILE), exist_ok=True)
     try:
         with open(PROCESSED_ENTRIES_FILE, 'r') as file:
-            # Laad de regels en beperk ze direct tot de MAX_HISTORY_SIZE
             lines = file.read().splitlines()
-            # Gebruik een deque voor efficiënt toevoegen en verwijderen aan beide kanten
             return deque(lines, maxlen=MAX_HISTORY_SIZE)
     except FileNotFoundError:
         return deque(maxlen=MAX_HISTORY_SIZE)
@@ -63,10 +58,21 @@ def save_processed_entries(processed_entries_deque):
         file.write('\n'.join(processed_entries_deque))
 
 def format_hashtags(hashtag_string):
-    """Formatteert een string van hashtags naar een correcte lijst."""
+    """
+    Formatteert een string van hashtags naar een correcte lijst.
+    Deze functie is robuust en verwijdert eventuele aanhalingstekens.
+    """
     if not hashtag_string:
         return ""
-    tags = filter(None, hashtag_string.split(' '))
+    
+    # BELANGRIJKE FIX: Verwijder eventuele aanhalingstekens en witruimte
+    # van de begin- en eindkant van de string.
+    clean_string = hashtag_string.strip(' "\'')
+
+    # Split de schone string op spaties en filter lege items eruit
+    tags = filter(None, clean_string.split(' '))
+    
+    # Voeg een '#' toe aan elke tag (indien nodig) en voeg ze samen
     return " ".join([f"#{tag.lstrip('#')}" for tag in tags])
 
 def check_and_post_new_items():
@@ -113,8 +119,6 @@ def check_and_post_new_items():
                     mastodon.status_post(status, visibility=TOOT_VISIBILITY)
                     print("Post succesvol geplaatst.")
                     
-                    # Voeg de URL toe aan de deque. Als de deque vol is,
-                    # wordt het oudste item automatisch verwijderd.
                     processed_entries.append(entry_url)
                     save_processed_entries(processed_entries)
 
@@ -124,7 +128,7 @@ def check_and_post_new_items():
                 print("Het laatste item is al gepost.")
 
         print(f"Wachten voor {CHECK_INTERVAL} seconden...")
-        time.sleep(CHECK_INTERVAL)
+        time.sleep(int(CHECK_INTERVAL))
 
 # --- Hoofdprogramma ---
 if __name__ == "__main__":
