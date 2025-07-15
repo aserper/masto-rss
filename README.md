@@ -107,6 +107,6 @@ The bot is now running!
 
 ## Acknowledgements
 
-This project is heavily inspired by and based on the original [masto-rss](https://github.com/piko-system/masto-rss). This version aims to add more robustness, flexibility, and ease of deployment using modern practices.
+This project is heavily inspired by and based on the original [masto-rss](https://github.com/aserper/masto-rss). This version aims to add more robustness, flexibility, and ease of deployment using modern practices.
 
 The Python script, Docker configuration, and this README were written and modified with the assistance of AI.
