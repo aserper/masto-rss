@@ -4,29 +4,34 @@ import os
 import time
 from collections import deque
 
-# --- Configuratie ---
-# Haal configuratie op uit omgevingsvariabelen
+# --- Configuration ---
+# Get configuration from environment variables
 MASTODON_CLIENT_ID = os.environ.get('MASTODON_CLIENT_ID')
 MASTODON_CLIENT_SECRET = os.environ.get('MASTODON_CLIENT_SECRET')
 MASTODON_ACCESS_TOKEN = os.environ.get('MASTODON_ACCESS_TOKEN')
 MASTODON_INSTANCE_URL = os.environ.get('MASTODON_INSTANCE_URL')
 RSS_FEED_URL = os.environ.get('RSS_FEED_URL')
 
-# Optionele configuratie met standaardwaarden
+# Optional configuration with default values
 TOOT_VISIBILITY = os.environ.get('TOOT_VISIBILITY', 'public')
 CHECK_INTERVAL = int(os.environ.get('CHECK_INTERVAL', 3600))
 HASHTAGS = os.environ.get('MASTO_RSS_HASHTAGS', '') 
 MAX_HISTORY_SIZE = int(os.environ.get('MAX_HISTORY_SIZE', 500))
 
-# Bestand om de verwerkte entry-URL's op te slaan.
+# NEW: Template for the toot format.
+# Use {title}, {link}, and {hashtags} as placeholders.
+DEFAULT_TEMPLATE = '{title}\n\n{link}\n\n{hashtags}'
+TOOT_TEMPLATE = os.environ.get('TOOT_TEMPLATE', DEFAULT_TEMPLATE)
+
+# File to store the processed entry URLs.
 PROCESSED_ENTRIES_FILE = '/state/processed_entries.txt'
 
-# Controleer of alle benodigde configuratie aanwezig is
+# Check if all required configuration is present
 if not all([MASTODON_CLIENT_ID, MASTODON_CLIENT_SECRET, MASTODON_ACCESS_TOKEN, MASTODON_INSTANCE_URL, RSS_FEED_URL]):
-    print("Fout: Niet alle vereiste omgevingsvariabelen zijn ingesteld.")
+    print("Error: Not all required environment variables are set.")
     exit(1)
 
-# --- Mastodon Initialisatie ---
+# --- Mastodon Initialization ---
 try:
     mastodon = Mastodon(
         client_id=MASTODON_CLIENT_ID,
@@ -35,15 +40,15 @@ try:
         api_base_url=MASTODON_INSTANCE_URL
     )
     mastodon.account_verify_credentials()
-    print("Succesvol ingelogd bij Mastodon.")
+    print("Successfully logged in to Mastodon.")
 except Exception as e:
-    print(f"Fout bij het initialiseren van de Mastodon client: {e}")
+    print(f"Error initializing Mastodon client: {e}")
     exit(1)
 
-# --- Functies ---
+# --- Functions ---
 
 def load_processed_entries():
-    """Laadt verwerkte entry-URL's uit een bestand in een deque."""
+    """Loads processed entry URLs from a file into a deque."""
     os.makedirs(os.path.dirname(PROCESSED_ENTRIES_FILE), exist_ok=True)
     try:
         with open(PROCESSED_ENTRIES_FILE, 'r') as file:
@@ -53,83 +58,74 @@ def load_processed_entries():
         return deque(maxlen=MAX_HISTORY_SIZE)
 
 def save_processed_entries(processed_entries_deque):
-    """Slaat de verwerkte entry-URL's van de deque op in een bestand."""
+    """Saves the processed entry URLs from the deque to a file."""
     with open(PROCESSED_ENTRIES_FILE, 'w') as file:
         file.write('\n'.join(processed_entries_deque))
 
 def format_hashtags(hashtag_string):
-    """
-    Formatteert een string van hashtags naar een correcte lijst.
-    Deze functie is robuust en verwijdert eventuele aanhalingstekens.
-    """
+    """Formats a string of hashtags into a correct list."""
     if not hashtag_string:
         return ""
-    
-    # BELANGRIJKE FIX: Verwijder eventuele aanhalingstekens en witruimte
-    # van de begin- en eindkant van de string.
     clean_string = hashtag_string.strip(' "\'')
-
-    # Split de schone string op spaties en filter lege items eruit
     tags = filter(None, clean_string.split(' '))
-    
-    # Voeg een '#' toe aan elke tag (indien nodig) en voeg ze samen
     return " ".join([f"#{tag.lstrip('#')}" for tag in tags])
 
 def check_and_post_new_items():
-    """Controleert de RSS-feed en post alleen het laatste item als het nieuw is."""
+    """Checks the RSS feed and only posts the latest item if it's new."""
     
     formatted_hashtags = format_hashtags(HASHTAGS)
     if formatted_hashtags:
-        print(f"Hashtags geconfigureerd: {formatted_hashtags}")
+        print(f"Hashtags configured: {formatted_hashtags}")
     else:
-        print("INFO: Geen hashtags geconfigureerd.")
+        print("INFO: No hashtags configured.")
     
-    print(f"INFO: De geschiedenis wordt beperkt tot de laatste {MAX_HISTORY_SIZE} items.")
-
+    print(f"INFO: Using toot template: {TOOT_TEMPLATE.replace(chr(10), ' ')}")
+    
     processed_entries = load_processed_entries()
 
     while True:
-        print(f"Controleren op nieuwe RSS-items van: {RSS_FEED_URL}")
+        print(f"Checking for new RSS items from: {RSS_FEED_URL}")
         
         feed = feedparser.parse(RSS_FEED_URL)
         
         if feed.bozo:
-            print(f"Waarschuwing: RSS-feed mogelijk niet goed geformatteerd. Fout: {feed.bozo_exception}")
+            print(f"Warning: RSS feed may be malformed. Error: {feed.bozo_exception}")
 
         if not feed.entries:
-            print("Geen items gevonden in de RSS-feed.")
+            print("No items found in the RSS feed.")
         else:
             latest_entry = feed.entries[0]
             entry_url = latest_entry.get('link')
-            entry_title = latest_entry.get('title', 'Geen titel')
+            entry_title = latest_entry.get('title', 'No title')
 
             if not entry_url:
-                print(f"Laatste item '{entry_title}' overgeslagen (geen link).")
+                print(f"Skipping latest item '{entry_title}' (no link).")
             elif entry_url not in processed_entries:
-                print(f"Nieuw laatste item gevonden: {entry_title}")
+                print(f"Found new latest item: {entry_title}")
                 
-                status_parts = [entry_title, entry_url]
-                if formatted_hashtags:
-                    status_parts.append(formatted_hashtags)
-                
-                status = "\n\n".join(status_parts)
+                # Compose the Mastodon status based on the template
+                status = TOOT_TEMPLATE.format(
+                    title=entry_title, 
+                    link=entry_url, 
+                    hashtags=formatted_hashtags
+                ).strip()
 
                 try:
-                    print(f"Bezig met posten: {status}")
+                    print(f"Posting: {status.replace(chr(10), ' ')}")
                     mastodon.status_post(status, visibility=TOOT_VISIBILITY)
-                    print("Post succesvol geplaatst.")
+                    print("Post successful.")
                     
                     processed_entries.append(entry_url)
                     save_processed_entries(processed_entries)
 
                 except Exception as e:
-                    print(f"Fout bij het posten naar Mastodon: {e}")
+                    print(f"Error posting to Mastodon: {e}")
             else:
-                print("Het laatste item is al gepost.")
+                print("The latest item has already been posted.")
 
-        print(f"Wachten voor {CHECK_INTERVAL} seconden...")
+        print(f"Waiting for {CHECK_INTERVAL} seconds...")
         time.sleep(int(CHECK_INTERVAL))
 
-# --- Hoofdprogramma ---
+# --- Main Program ---
 if __name__ == "__main__":
     check_and_post_new_items()
