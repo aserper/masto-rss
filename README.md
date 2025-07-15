@@ -1,26 +1,9 @@
-# Masto-rss
-
-A simple Mastodon bot written in python that posts updates from an RSS feed to a Mastodon account.
-This project is meant to be built to a docker container, so all of the options need to be set as environment variables:
-
-MASTODON_CLIENT_ID = Mastodon  client  ID
-
-MASTODON_CLIENT_SECRET = Mastodon  client  secret
-
-MASTODON_ACCESS_TOKEN = Mastodon  access  token
-
-MASTODON_INSTANCE_URL = Mastodon  instance  URL
-
-RSS_FEED_URL = URL  of  RSS/xml  feed
-
-TOOT_VISIBILITY = 'public', 'unlisted', 'private', or 'direct'
-
-MASTO_RSS_HASHTAGS = Hashtags you want to add
-
-CHECK_INTERVAL = interval when script checks for new items in seconds (default 3600s)
-
-MAX_HISTORY_SIZE = how many history lines the script needs to keep
-
-The best way to use this project is by using a docker container.
-When using docker, make a bind mount between /state on the container to whatever directory you want on your machine in order to keep the state of the feeds that were already posted
-
+Masto-RSS Advanced BotA flexible and robust Python script to automatically post the latest entry from an RSS feed to Mastodon, designed to run continuously in a Docker container.This project is based on the original concept of masto-rss but has been significantly rewritten and extended with modern features for stability and customization.FeaturesPosts Only the Latest Item: Checks an RSS feed periodically and posts only the single most recent entry, preventing feed spam.Prevents Duplicates: Keeps a history of posted items to ensure the same link is never posted twice.History Limit: The history file is automatically pruned to a configurable size (MAX_HISTORY_SIZE) to prevent it from growing indefinitely.Custom Toot Format: Fully customize the look of your posts using a template string with placeholders ({title}, {link}, {hashtags}).Hashtag Support: Automatically append a configurable list of hashtags to every post.Dockerized: Comes with a Dockerfile and docker-compose.yml for easy, reliable, and isolated deployment.Robust Error Handling: Designed to run forever, it handles connection errors to the RSS feed or Mastodon gracefully without crashing.Setup & ConfigurationThe recommended way to run this bot is by using Docker and Docker Compose.1. PrerequisitesDocker and Docker Compose installed on your system.A Mastodon account and an application set up in Preferences > Development. You will need the Client Key, Client Secret, and Access Token.2. Create the Project FilesCreate a directory for your project and place the following files inside:masto-rss.py (The Python script)Dockerfilerequirements.txtdocker-compose.yml3. Configure Environment VariablesAll configuration is handled through the docker-compose.yml file. Open it and edit the environment section with your own details.VariableDescriptionExampleMASTODON_CLIENT_IDYour Mastodon application's Client Key.abc...MASTODON_CLIENT_SECRETYour Mastodon application's Client Secret.def...MASTODON_ACCESS_TOKENYour Mastodon application's Access Token.ghi...MASTODON_INSTANCE_URLThe base URL of your Mastodon instance.https://mastodon.socialRSS_FEED_URLThe full URL of the RSS feed you want to monitor.https://www.theverge.com/rss/index.xmlCHECK_INTERVAL(Optional) The time in seconds between checks.3600 (for 1 hour)MASTO_RSS_HASHTAGS(Optional) A space-separated list of hashtags to add to each post.news tech pythonMAX_HISTORY_SIZE(Optional) The maximum number of post URLs to remember.500TOOT_VISIBILITY(Optional) The visibility of the toot (public, unlisted, private, direct).publicTOOT_TEMPLATE(Optional) A string to format the toot. See "Customizing the Toot Format" below.'{title}\n\n{link}\n\n{hashtags}'PYTHONUNBUFFEREDShould be kept at 1 to ensure logs appear in real-time in Docker.14. Customizing the Toot FormatYou can change the layout of your posts using the TOOT_TEMPLATE variable. Use the following placeholders:{title}: The title of the RSS entry.{link}: The URL of the RSS entry.{hashtags}: The configured hashtags.Examples in docker-compose.yml:Compact Format:- TOOT_TEMPLATE='{title} - {link} {hashtags}'
+Personalized Format:- TOOT_TEMPLATE='New on the blog: {title}\nRead it here: {link}\n\n{hashtags}'
+Running the BotMake sure you have configured your docker-compose.yml file correctly.Create the state directory from your terminal:mkdir ./state
+Start the container in detached mode:docker-compose up -d
+The bot is now running!Managing the ContainerView logs in real-time:docker-compose logs -f
+Stop the container:docker-compose down
+Restart the container:docker-compose restart
+Update the script and rebuild the image:docker-compose up -d --build
+AcknowledgementsThis project is heavily inspired by and based on the original masto-rss. This version aims to add more robustness, flexibility, and ease of deployment using modern practices.The Python script, Docker configuration, and this README were written and modified with the assistance of AI.
