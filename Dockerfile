@@ -19,4 +19,4 @@ COPY . .
 
 # Step 5: Execute the correct Python script
 # Note the correct filename.
-CMD ["python3", "masto-rss.py"]
+CMD ["python3", "main.py"]
