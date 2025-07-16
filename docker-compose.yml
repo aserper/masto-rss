@@ -1,53 +1,30 @@
-# Use a recent and stable version of Docker Compose
-version: '3.8'
-
-# Define the services (containers) that make up your application
 services:
-  # The name of our service
   masto-rss:
-    # Build the image from the Dockerfile in the current directory (.)
-    build: .
-    # Give the container a fixed, recognizable name
-    container_name: masto-rss-container
-    # Ensure the container restarts automatically if it crashes,
-    # unless it has been stopped manually.
+    # Use the pre-built image from Docker Hub
+    image: doorknob2947/masto-rss-advanced:latest
+    container_name: masto-rss-bot
     restart: unless-stopped
-    
-    # Mount volumes to make data persistent
     volumes:
-      # Mount the 'state' directory on the host to the '/state' directory in the container.
-      # This ensures your history is saved across restarts.
+      # This volume persists the history of posted links
       - ./state:/state
-      
-    # Define all environment variables the script needs
     environment:
-      # Ensures that the output of print() is sent directly to the logs
-      - PYTHONUNBUFFERED=1
-      
-      # --- Your Mastodon & RSS Configuration ---
-      # Replace the values below with your own details
-      - MASTODON_CLIENT_ID=YOUR_CLIENT_ID
-      - MASTODON_CLIENT_SECRET=YOUR_CLIENT_SECRET
-      - MASTODON_ACCESS_TOKEN=YOUR_ACCESS_TOKEN
-      - MASTODON_INSTANCE_URL=https://your-instance.url
-      - RSS_FEED_URL=https://your.rss/feed.xml
-      
-      # --- Optional Settings ---
-      # The time in seconds between checks (default: 3600 = 1 hour)
-      - CHECK_INTERVAL=3600
-      # A list of hashtags, separated by spaces
-      - MASTO_RSS_HASHTAGS=news tech python
-      # The maximum number of remembered posts (default: 500)
-      - MAX_HISTORY_SIZE=500
-      # Visibility of the toot: 'public', 'unlisted', 'private', or 'direct'
-      - TOOT_VISIBILITY=public
+      # --- Mastodon API Credentials (Required) ---
+      - MASTODON_CLIENT_ID=YOUR_CLIENT_KEY_HERE
+      - MASTODON_CLIENT_SECRET=YOUR_CLIENT_SECRET_HERE
+      - MASTODON_ACCESS_TOKEN=YOUR_ACCESS_TOKEN_HERE
+      - MASTODON_INSTANCE_URL=[https://mastodon.social](https://mastodon.social)
 
-      # --- Customize your toot format here ---
-      # Placeholders: {title}, {link}, {hashtags}. Use \n for a new line.
-      # Make sure the line is enclosed in single quotes.
-      #
-      # Example 1: Default format (uncomment to use)
-      # - TOOT_TEMPLATE='{title}\n\n{link}\n\n{hashtags}'
-      #
-      # Example 2: Short, compact format
-      - TOOT_TEMPLATE='{title} - {link} {hashtags}'
+      # --- RSS Feed Configuration (Required) ---
+      - RSS_FEED_URL=[https://www.theverge.com/rss/index.xml](https://www.theverge.com/rss/index.xml)
+
+      # --- Bot Behavior (Optional) ---
+      - CHECK_INTERVAL=3600 # Time in seconds between checks (e.g., 1 hour)
+      - MAX_HISTORY_SIZE=500 # Max number of posted links to remember
+      - TOOT_VISIBILITY=public # public, unlisted, private, or direct
+
+      # --- Toot Content (Optional) ---
+      - MASTO_RSS_HASHTAGS="news tech python" # Space-separated list of hashtags
+      - TOOT_TEMPLATE='{title}\n\n{link}\n\n{hashtags}'
+
+      # --- System (Do not change) ---
+      - PYTHONUNBUFFERED=1
