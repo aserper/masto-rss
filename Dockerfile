@@ -4,14 +4,15 @@ FROM alpine:3.18
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the entire current directory into the container at /app
+# Install Python dependencies in a single layer
+RUN apk add --no-cache python3 py3-pip
+
+# Copy requirements first for better layer caching
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
 COPY . /app
-
-# Install any Python dependencies
-
-RUN apk add python3
-RUN apk add py3-pip
-RUN pip install -r requirements.txt
 
 # Run Python script
 CMD ["python", "main.py"]
