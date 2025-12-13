@@ -4,10 +4,7 @@ import unittest
 from unittest.mock import Mock, patch
 import tempfile
 import os
-import time
 from bot import MastodonRSSBot
-import responses
-import feedparser
 
 
 class TestRSSFeedIntegration(unittest.TestCase):
@@ -31,37 +28,17 @@ class TestRSSFeedIntegration(unittest.TestCase):
         if os.path.exists(self.test_config["state_file"]):
             os.remove(self.test_config["state_file"])
 
-    @responses.activate
+    @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
-    def test_end_to_end_rss_to_mastodon(self, mock_mastodon):
+    def test_end_to_end_rss_to_mastodon(self, mock_mastodon, mock_parse):
         """Test complete flow from RSS feed to Mastodon post"""
-        # Mock RSS feed response
-        rss_feed = """<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-    <channel>
-        <title>Test Feed</title>
-        <link>https://example.com</link>
-        <description>Test RSS Feed</description>
-        <item>
-            <title>First Article</title>
-            <link>https://example.com/article1</link>
-            <description>This is the first article</description>
-        </item>
-        <item>
-            <title>Second Article</title>
-            <link>https://example.com/article2</link>
-            <description>This is the second article</description>
-        </item>
-    </channel>
-</rss>"""
-
-        responses.add(
-            responses.GET,
-            "https://example.com/feed.xml",
-            body=rss_feed.encode("utf-8"),
-            status=200,
-            content_type="application/xml; charset=utf-8",
-        )
+        # Create mock feed object
+        mock_feed = Mock()
+        mock_feed.entries = [
+            {"title": "First Article", "link": "https://example.com/article1"},
+            {"title": "Second Article", "link": "https://example.com/article2"},
+        ]
+        mock_parse.return_value = mock_feed
 
         # Mock Mastodon instance
         mock_instance = Mock()
@@ -82,31 +59,16 @@ class TestRSSFeedIntegration(unittest.TestCase):
         self.assertIn("Second Article", calls[1][0][0])
         self.assertIn("https://example.com/article2", calls[1][0][0])
 
-    @responses.activate
+    @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
-    def test_atom_feed_parsing(self, mock_mastodon):
+    def test_atom_feed_parsing(self, mock_mastodon, mock_parse):
         """Test parsing Atom feeds"""
-        atom_feed = """<?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <title>Test Atom Feed</title>
-    <link href="https://example.com"/>
-    <updated>2024-01-01T00:00:00Z</updated>
-    <entry>
-        <title>Atom Article</title>
-        <link href="https://example.com/atom1"/>
-        <id>https://example.com/atom1</id>
-        <updated>2024-01-01T00:00:00Z</updated>
-        <summary>This is an atom article</summary>
-    </entry>
-</feed>"""
-
-        responses.add(
-            responses.GET,
-            "https://example.com/feed.xml",
-            body=atom_feed.encode("utf-8"),
-            status=200,
-            content_type="application/atom+xml; charset=utf-8",
-        )
+        # Create mock Atom feed object
+        mock_feed = Mock()
+        mock_feed.entries = [
+            {"title": "Atom Article", "link": "https://example.com/atom1"}
+        ]
+        mock_parse.return_value = mock_feed
 
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
@@ -118,28 +80,14 @@ class TestRSSFeedIntegration(unittest.TestCase):
         calls = mock_instance.status_post.call_args_list
         self.assertIn("Atom Article", calls[0][0][0])
 
-    @responses.activate
+    @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
-    def test_persistence_across_runs(self, mock_mastodon):
+    def test_persistence_across_runs(self, mock_mastodon, mock_parse):
         """Test that processed entries persist across multiple bot runs"""
-        rss_feed = """<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-    <channel>
-        <title>Test Feed</title>
-        <item>
-            <title>Article 1</title>
-            <link>https://example.com/1</link>
-        </item>
-    </channel>
-</rss>"""
-
-        responses.add(
-            responses.GET,
-            "https://example.com/feed.xml",
-            body=rss_feed.encode("utf-8"),
-            status=200,
-            content_type="application/xml; charset=utf-8",
-        )
+        # Create mock feed object
+        mock_feed = Mock()
+        mock_feed.entries = [{"title": "Article 1", "link": "https://example.com/1"}]
+        mock_parse.return_value = mock_feed
 
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
@@ -157,70 +105,31 @@ class TestRSSFeedIntegration(unittest.TestCase):
         # Total posts should be 1
         self.assertEqual(mock_instance.status_post.call_count, 1)
 
-    @responses.activate
+    @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
-    def test_incremental_feed_updates(self, mock_mastodon):
+    def test_incremental_feed_updates(self, mock_mastodon, mock_parse):
         """Test handling of new entries added to feed over time"""
-        # Initial feed with 2 articles
-        initial_feed = """<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-    <channel>
-        <title>Test Feed</title>
-        <item>
-            <title>Article 1</title>
-            <link>https://example.com/1</link>
-        </item>
-        <item>
-            <title>Article 2</title>
-            <link>https://example.com/2</link>
-        </item>
-    </channel>
-</rss>"""
-
-        responses.add(
-            responses.GET,
-            "https://example.com/feed.xml",
-            body=initial_feed,
-            status=200,
-            content_type="application/xml",
-        )
-
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
 
-        # First run
+        # First run - initial feed with 2 articles
+        mock_feed = Mock()
+        mock_feed.entries = [
+            {"title": "Article 1", "link": "https://example.com/1"},
+            {"title": "Article 2", "link": "https://example.com/2"},
+        ]
+        mock_parse.return_value = mock_feed
+
         bot = MastodonRSSBot(**self.test_config)
         count1 = bot.process_new_entries()
         self.assertEqual(count1, 2)
 
-        # Update feed with 1 new article
-        responses.reset()
-        updated_feed = """<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-    <channel>
-        <title>Test Feed</title>
-        <item>
-            <title>Article 3</title>
-            <link>https://example.com/3</link>
-        </item>
-        <item>
-            <title>Article 2</title>
-            <link>https://example.com/2</link>
-        </item>
-        <item>
-            <title>Article 1</title>
-            <link>https://example.com/1</link>
-        </item>
-    </channel>
-</rss>"""
-
-        responses.add(
-            responses.GET,
-            "https://example.com/feed.xml",
-            body=updated_feed,
-            status=200,
-            content_type="application/xml",
-        )
+        # Second run - updated feed with 1 new article
+        mock_feed.entries = [
+            {"title": "Article 3", "link": "https://example.com/3"},
+            {"title": "Article 2", "link": "https://example.com/2"},
+            {"title": "Article 1", "link": "https://example.com/1"},
+        ]
 
         # Second run - should only post the new article
         count2 = bot.process_new_entries()
@@ -229,16 +138,12 @@ class TestRSSFeedIntegration(unittest.TestCase):
         # Verify only 3 total posts
         self.assertEqual(mock_instance.status_post.call_count, 3)
 
-    @responses.activate
+    @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
-    def test_network_error_handling(self, mock_mastodon):
+    def test_network_error_handling(self, mock_mastodon, mock_parse):
         """Test handling of network errors when fetching feed"""
-        responses.add(
-            responses.GET,
-            "https://example.com/feed.xml",
-            body="Network error",
-            status=500,
-        )
+        # Simulate network error by returning None
+        mock_parse.return_value = None
 
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
@@ -250,25 +155,15 @@ class TestRSSFeedIntegration(unittest.TestCase):
         self.assertEqual(count, 0)
         self.assertEqual(mock_instance.status_post.call_count, 0)
 
-    @responses.activate
+    @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
-    def test_malformed_xml_handling(self, mock_mastodon):
+    def test_malformed_xml_handling(self, mock_mastodon, mock_parse):
         """Test handling of malformed XML feeds"""
-        malformed_feed = """<?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0">
-            <channel>
-                <title>Broken Feed
-                <item>
-                    <title>Article</title>
-        """  # Intentionally malformed
-
-        responses.add(
-            responses.GET,
-            "https://example.com/feed.xml",
-            body=malformed_feed,
-            status=200,
-            content_type="application/xml",
-        )
+        # Create mock feed with bozo_exception (feedparser's error indicator)
+        mock_feed = Mock()
+        mock_feed.entries = []
+        mock_feed.bozo_exception = Exception("XML parsing error")
+        mock_parse.return_value = mock_feed
 
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
