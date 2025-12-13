@@ -1,18 +1,19 @@
 # Test dependencies for Masto-RSS bot
+# Updated to latest versions (2025-12-12)
 # Install with: pip install -r requirements-test.txt
 
 # Base requirements
 -r requirements.txt
 
 # Testing framework
-pytest==7.4.4
-pytest-cov==4.1.0
-pytest-mock==3.12.0
+pytest==9.0.2
+pytest-cov==6.0.0
+pytest-mock==3.14.0
 
 # Code quality
-flake8==7.0.0
-black==24.1.1
-mypy==1.8.0
+flake8==7.1.1
+black==25.12.0
+mypy==1.19.0
 
 # Coverage reporting
-coverage==7.4.0
+coverage==7.6.12
