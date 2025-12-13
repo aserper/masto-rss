@@ -1,9 +1,11 @@
 """Integration tests for Mastodon RSS Bot"""
+
 import unittest
 from unittest.mock import Mock, patch
 import tempfile
 import os
 import time
+from textwrap import dedent
 from bot import MastodonRSSBot
 import responses
 import feedparser
@@ -15,27 +17,28 @@ class TestRSSFeedIntegration(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures"""
         self.test_config = {
-            'client_id': 'test_client_id',
-            'client_secret': 'test_client_secret',
-            'access_token': 'test_access_token',
-            'instance_url': 'https://mastodon.test',
-            'feed_url': 'https://example.com/feed.xml',
-            'toot_visibility': 'public',
-            'check_interval': 1,
-            'state_file': tempfile.mktemp()
+            "client_id": "test_client_id",
+            "client_secret": "test_client_secret",
+            "access_token": "test_access_token",
+            "instance_url": "https://mastodon.test",
+            "feed_url": "https://example.com/feed.xml",
+            "toot_visibility": "public",
+            "check_interval": 1,
+            "state_file": tempfile.mktemp(),
         }
 
     def tearDown(self):
         """Clean up test files"""
-        if os.path.exists(self.test_config['state_file']):
-            os.remove(self.test_config['state_file'])
+        if os.path.exists(self.test_config["state_file"]):
+            os.remove(self.test_config["state_file"])
 
     @responses.activate
-    @patch('bot.Mastodon')
+    @patch("bot.Mastodon")
     def test_end_to_end_rss_to_mastodon(self, mock_mastodon):
         """Test complete flow from RSS feed to Mastodon post"""
         # Mock RSS feed response
-        rss_feed = """<?xml version="1.0" encoding="UTF-8"?>
+        rss_feed = dedent(
+            """<?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0">
             <channel>
                 <title>Test Feed</title>
@@ -53,13 +56,14 @@ class TestRSSFeedIntegration(unittest.TestCase):
                 </item>
             </channel>
         </rss>"""
+        ).strip()
 
         responses.add(
             responses.GET,
-            'https://example.com/feed.xml',
+            "https://example.com/feed.xml",
             body=rss_feed,
             status=200,
-            content_type='application/xml'
+            content_type="application/xml",
         )
 
         # Mock Mastodon instance
@@ -76,16 +80,17 @@ class TestRSSFeedIntegration(unittest.TestCase):
 
         # Verify the content of posts
         calls = mock_instance.status_post.call_args_list
-        self.assertIn('First Article', calls[0][0][0])
-        self.assertIn('https://example.com/article1', calls[0][0][0])
-        self.assertIn('Second Article', calls[1][0][0])
-        self.assertIn('https://example.com/article2', calls[1][0][0])
+        self.assertIn("First Article", calls[0][0][0])
+        self.assertIn("https://example.com/article1", calls[0][0][0])
+        self.assertIn("Second Article", calls[1][0][0])
+        self.assertIn("https://example.com/article2", calls[1][0][0])
 
     @responses.activate
-    @patch('bot.Mastodon')
+    @patch("bot.Mastodon")
     def test_atom_feed_parsing(self, mock_mastodon):
         """Test parsing Atom feeds"""
-        atom_feed = """<?xml version="1.0" encoding="UTF-8"?>
+        atom_feed = dedent(
+            """<?xml version="1.0" encoding="UTF-8"?>
         <feed xmlns="http://www.w3.org/2005/Atom">
             <title>Test Atom Feed</title>
             <link href="https://example.com"/>
@@ -98,13 +103,14 @@ class TestRSSFeedIntegration(unittest.TestCase):
                 <summary>This is an atom article</summary>
             </entry>
         </feed>"""
+        ).strip()
 
         responses.add(
             responses.GET,
-            'https://example.com/feed.xml',
+            "https://example.com/feed.xml",
             body=atom_feed,
             status=200,
-            content_type='application/atom+xml'
+            content_type="application/atom+xml",
         )
 
         mock_instance = Mock()
@@ -115,13 +121,14 @@ class TestRSSFeedIntegration(unittest.TestCase):
 
         self.assertEqual(count, 1)
         calls = mock_instance.status_post.call_args_list
-        self.assertIn('Atom Article', calls[0][0][0])
+        self.assertIn("Atom Article", calls[0][0][0])
 
     @responses.activate
-    @patch('bot.Mastodon')
+    @patch("bot.Mastodon")
     def test_persistence_across_runs(self, mock_mastodon):
         """Test that processed entries persist across multiple bot runs"""
-        rss_feed = """<?xml version="1.0" encoding="UTF-8"?>
+        rss_feed = dedent(
+            """<?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0">
             <channel>
                 <title>Test Feed</title>
@@ -131,13 +138,14 @@ class TestRSSFeedIntegration(unittest.TestCase):
                 </item>
             </channel>
         </rss>"""
+        ).strip()
 
         responses.add(
             responses.GET,
-            'https://example.com/feed.xml',
+            "https://example.com/feed.xml",
             body=rss_feed,
             status=200,
-            content_type='application/xml'
+            content_type="application/xml",
         )
 
         mock_instance = Mock()
@@ -157,11 +165,12 @@ class TestRSSFeedIntegration(unittest.TestCase):
         self.assertEqual(mock_instance.status_post.call_count, 1)
 
     @responses.activate
-    @patch('bot.Mastodon')
+    @patch("bot.Mastodon")
     def test_incremental_feed_updates(self, mock_mastodon):
         """Test handling of new entries added to feed over time"""
         # Initial feed with 2 articles
-        initial_feed = """<?xml version="1.0" encoding="UTF-8"?>
+        initial_feed = dedent(
+            """<?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0">
             <channel>
                 <title>Test Feed</title>
@@ -175,13 +184,14 @@ class TestRSSFeedIntegration(unittest.TestCase):
                 </item>
             </channel>
         </rss>"""
+        ).strip()
 
         responses.add(
             responses.GET,
-            'https://example.com/feed.xml',
+            "https://example.com/feed.xml",
             body=initial_feed,
             status=200,
-            content_type='application/xml'
+            content_type="application/xml",
         )
 
         mock_instance = Mock()
@@ -194,7 +204,8 @@ class TestRSSFeedIntegration(unittest.TestCase):
 
         # Update feed with 1 new article
         responses.reset()
-        updated_feed = """<?xml version="1.0" encoding="UTF-8"?>
+        updated_feed = dedent(
+            """<?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0">
             <channel>
                 <title>Test Feed</title>
@@ -212,13 +223,14 @@ class TestRSSFeedIntegration(unittest.TestCase):
                 </item>
             </channel>
         </rss>"""
+        ).strip()
 
         responses.add(
             responses.GET,
-            'https://example.com/feed.xml',
+            "https://example.com/feed.xml",
             body=updated_feed,
             status=200,
-            content_type='application/xml'
+            content_type="application/xml",
         )
 
         # Second run - should only post the new article
@@ -229,14 +241,14 @@ class TestRSSFeedIntegration(unittest.TestCase):
         self.assertEqual(mock_instance.status_post.call_count, 3)
 
     @responses.activate
-    @patch('bot.Mastodon')
+    @patch("bot.Mastodon")
     def test_network_error_handling(self, mock_mastodon):
         """Test handling of network errors when fetching feed"""
         responses.add(
             responses.GET,
-            'https://example.com/feed.xml',
+            "https://example.com/feed.xml",
             body="Network error",
-            status=500
+            status=500,
         )
 
         mock_instance = Mock()
@@ -250,7 +262,7 @@ class TestRSSFeedIntegration(unittest.TestCase):
         self.assertEqual(mock_instance.status_post.call_count, 0)
 
     @responses.activate
-    @patch('bot.Mastodon')
+    @patch("bot.Mastodon")
     def test_malformed_xml_handling(self, mock_mastodon):
         """Test handling of malformed XML feeds"""
         malformed_feed = """<?xml version="1.0" encoding="UTF-8"?>
@@ -263,10 +275,10 @@ class TestRSSFeedIntegration(unittest.TestCase):
 
         responses.add(
             responses.GET,
-            'https://example.com/feed.xml',
+            "https://example.com/feed.xml",
             body=malformed_feed,
             status=200,
-            content_type='application/xml'
+            content_type="application/xml",
         )
 
         mock_instance = Mock()
@@ -287,40 +299,40 @@ class TestMastodonAPIIntegration(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures"""
         self.test_config = {
-            'client_id': 'test_client_id',
-            'client_secret': 'test_client_secret',
-            'access_token': 'test_access_token',
-            'instance_url': 'https://mastodon.test',
-            'feed_url': 'https://example.com/feed.xml',
-            'toot_visibility': 'public',
-            'check_interval': 1,
-            'state_file': tempfile.mktemp()
+            "client_id": "test_client_id",
+            "client_secret": "test_client_secret",
+            "access_token": "test_access_token",
+            "instance_url": "https://mastodon.test",
+            "feed_url": "https://example.com/feed.xml",
+            "toot_visibility": "public",
+            "check_interval": 1,
+            "state_file": tempfile.mktemp(),
         }
 
     def tearDown(self):
         """Clean up test files"""
-        if os.path.exists(self.test_config['state_file']):
-            os.remove(self.test_config['state_file'])
+        if os.path.exists(self.test_config["state_file"]):
+            os.remove(self.test_config["state_file"])
 
-    @patch('bot.Mastodon')
+    @patch("bot.Mastodon")
     def test_different_visibility_levels(self, mock_mastodon):
         """Test posting with different visibility levels"""
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
 
-        visibility_levels = ['public', 'unlisted', 'private', 'direct']
+        visibility_levels = ["public", "unlisted", "private", "direct"]
 
         for visibility in visibility_levels:
-            self.test_config['toot_visibility'] = visibility
+            self.test_config["toot_visibility"] = visibility
             bot = MastodonRSSBot(**self.test_config)
             bot.post_to_mastodon("Test status")
 
         # Verify all visibility levels were used
         calls = mock_instance.status_post.call_args_list
         for idx, visibility in enumerate(visibility_levels):
-            self.assertEqual(calls[idx][1]['visibility'], visibility)
+            self.assertEqual(calls[idx][1]["visibility"], visibility)
 
-    @patch('bot.Mastodon')
+    @patch("bot.Mastodon")
     def test_retry_on_rate_limit(self, mock_mastodon):
         """Test that rate limit errors are handled appropriately"""
         from mastodon import MastodonRatelimitError
@@ -329,7 +341,7 @@ class TestMastodonAPIIntegration(unittest.TestCase):
         # First call raises rate limit error, second succeeds
         mock_instance.status_post.side_effect = [
             MastodonRatelimitError("Rate limited"),
-            None
+            None,
         ]
         mock_mastodon.return_value = mock_instance
 
@@ -344,5 +356,5 @@ class TestMastodonAPIIntegration(unittest.TestCase):
         self.assertTrue(result2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

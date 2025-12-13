@@ -1,4 +1,5 @@
 """Mastodon RSS Bot - Core functionality"""
+
 import feedparser
 from mastodon import Mastodon
 import os
@@ -16,9 +17,9 @@ class MastodonRSSBot:
         access_token: str,
         instance_url: str,
         feed_url: str,
-        toot_visibility: str = 'public',
+        toot_visibility: str = "public",
         check_interval: int = 300,
-        state_file: str = '/state/processed_entries.txt'
+        state_file: str = "/state/processed_entries.txt",
     ):
         """
         Initialize the Mastodon RSS bot.
@@ -43,7 +44,7 @@ class MastodonRSSBot:
             client_id=client_id,
             client_secret=client_secret,
             access_token=access_token,
-            api_base_url=instance_url
+            api_base_url=instance_url,
         )
 
     def load_processed_entries(self) -> Set[str]:
@@ -54,7 +55,7 @@ class MastodonRSSBot:
             Set of URLs that have been processed
         """
         try:
-            with open(self.state_file, 'r') as file:
+            with open(self.state_file, "r") as file:
                 return set(file.read().splitlines())
         except FileNotFoundError:
             return set()
@@ -69,8 +70,8 @@ class MastodonRSSBot:
         # Ensure directory exists
         os.makedirs(os.path.dirname(self.state_file), exist_ok=True)
 
-        with open(self.state_file, 'w') as file:
-            file.write('\n'.join(sorted(processed_entries)))
+        with open(self.state_file, "w") as file:
+            file.write("\n".join(sorted(processed_entries)))
 
     def parse_feed(self) -> Optional[feedparser.FeedParserDict]:
         """
@@ -81,7 +82,7 @@ class MastodonRSSBot:
         """
         try:
             feed = feedparser.parse(self.feed_url)
-            if hasattr(feed, 'bozo_exception'):
+            if hasattr(feed, "bozo_exception"):
                 print(f"Warning: Feed parsing issue: {feed.bozo_exception}")
             return feed
         except Exception as e:
@@ -98,8 +99,8 @@ class MastodonRSSBot:
         Returns:
             Formatted status text
         """
-        title = entry.get('title', 'Untitled')
-        link = entry.get('link', '')
+        title = entry.get("title", "Untitled")
+        link = entry.get("link", "")
         return f"\n{title}\n\n{link}"
 
     def post_to_mastodon(self, status: str) -> bool:
@@ -133,7 +134,7 @@ class MastodonRSSBot:
 
         # Parse feed
         feed = self.parse_feed()
-        if not feed or not hasattr(feed, 'entries'):
+        if not feed or not hasattr(feed, "entries"):
             print("No entries found in feed")
             return 0
 
@@ -141,7 +142,7 @@ class MastodonRSSBot:
 
         # Process each entry
         for entry in feed.entries:
-            entry_url = entry.get('link', '')
+            entry_url = entry.get("link", "")
 
             if not entry_url:
                 print("Skipping entry without URL")
@@ -149,7 +150,7 @@ class MastodonRSSBot:
 
             # Check if entry is new
             if entry_url not in processed_entries:
-                title = entry.get('title', 'Untitled')
+                title = entry.get("title", "Untitled")
                 print(f"Found a new RSS item: {title}")
 
                 # Format and post status
