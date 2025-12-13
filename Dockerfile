@@ -14,5 +14,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
 COPY . /app
 
-# Run Python script
-CMD ["python", "main.py"]
+# Run Python script with unbuffered output for container logs
+CMD ["python", "-u", "main.py"]
