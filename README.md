@@ -3,6 +3,7 @@
 # Masto-RSS
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/aserper/masto-rss/masto-rss.yml?style=for-the-badge&logo=github&label=Build)](https://github.com/aserper/masto-rss/actions/workflows/masto-rss.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/aserper/masto-rss/test.yml?style=for-the-badge&logo=github&label=Tests)](https://github.com/aserper/masto-rss/actions/workflows/test.yml)
 [![Docker Hub](https://img.shields.io/badge/docker%20hub-amitserper%2Fmasto--rss-blue?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/amitserper/masto-rss)
 [![GHCR](https://img.shields.io/badge/ghcr.io-masto--rss-blue?style=for-the-badge&logo=docker&logoColor=white)](https://github.com/aserper/masto-rss/pkgs/container/masto-rss)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-yellow.svg?style=for-the-badge)](LICENSE)
@@ -180,17 +181,6 @@ python main.py
 The bot maintains state in `/state/processed_entries.txt` to track which feed items have already been posted. This prevents duplicate posts across restarts.
 
 **Important:** Always mount `/state` as a volume to preserve this state file.
-
-## CI/CD
-
-The project uses GitHub Actions for automated multiarch builds and deployments:
-
-- Builds on every push to `main`
-- Creates images for both amd64 and arm64 architectures
-- Automatically pushes to Docker Hub and GitHub Container Registry
-- Uses Docker layer caching for faster builds
-
-See [.github/workflows/masto-rss.yml](.github/workflows/masto-rss.yml) for the full pipeline.
 
 ## Contributing
 
