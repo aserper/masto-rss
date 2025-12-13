@@ -58,9 +58,9 @@ class TestRSSFeedIntegration(unittest.TestCase):
         responses.add(
             responses.GET,
             "https://example.com/feed.xml",
-            body=rss_feed,
+            body=rss_feed.encode("utf-8"),
             status=200,
-            content_type="application/xml",
+            content_type="application/xml; charset=utf-8",
         )
 
         # Mock Mastodon instance
@@ -103,9 +103,9 @@ class TestRSSFeedIntegration(unittest.TestCase):
         responses.add(
             responses.GET,
             "https://example.com/feed.xml",
-            body=atom_feed,
+            body=atom_feed.encode("utf-8"),
             status=200,
-            content_type="application/atom+xml",
+            content_type="application/atom+xml; charset=utf-8",
         )
 
         mock_instance = Mock()
@@ -136,9 +136,9 @@ class TestRSSFeedIntegration(unittest.TestCase):
         responses.add(
             responses.GET,
             "https://example.com/feed.xml",
-            body=rss_feed,
+            body=rss_feed.encode("utf-8"),
             status=200,
-            content_type="application/xml",
+            content_type="application/xml; charset=utf-8",
         )
 
         mock_instance = Mock()
