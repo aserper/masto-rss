@@ -400,6 +400,7 @@ class TestMainEntry(unittest.TestCase):
             del os.environ["RSS_FEED_URL"]
 
         from main import main
+
         mock_bot_instance = Mock()
         mock_bot_class.return_value = mock_bot_instance
 

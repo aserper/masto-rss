@@ -17,7 +17,9 @@ def main():
 
     # 2. Comma-separated list of feeds
     if os.environ.get("RSS_FEEDS"):
-        feeds = [url.strip() for url in os.environ["RSS_FEEDS"].split(",") if url.strip()]
+        feeds = [
+            url.strip() for url in os.environ["RSS_FEEDS"].split(",") if url.strip()
+        ]
         feed_urls.extend(feeds)
 
     # 3. File containing list of feeds
@@ -25,7 +27,11 @@ def main():
     if feeds_file and os.path.exists(feeds_file):
         try:
             with open(feeds_file, "r") as f:
-                file_feeds = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+                file_feeds = [
+                    line.strip()
+                    for line in f
+                    if line.strip() and not line.startswith("#")
+                ]
                 feed_urls.extend(file_feeds)
         except Exception as e:
             print(f"Error reading feeds file {feeds_file}: {e}")
@@ -39,7 +45,9 @@ def main():
             seen.add(url)
 
     if not unique_feed_urls:
-        print("Error: No RSS feeds configured. Please set RSS_FEED_URL, RSS_FEEDS, or FEEDS_FILE.")
+        print(
+            "Error: No RSS feeds configured. Please set RSS_FEED_URL, RSS_FEEDS, or FEEDS_FILE."
+        )
         return
 
     bot = MastodonRSSBot(
