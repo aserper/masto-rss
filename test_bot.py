@@ -18,7 +18,7 @@ class TestMastodonRSSBot(unittest.TestCase):
             "client_secret": "test_client_secret",
             "access_token": "test_access_token",
             "instance_url": "https://mastodon.test",
-            "feed_url": "https://example.com/feed.xml",
+            "feed_urls": ["https://example.com/feed.xml"],
             "toot_visibility": "public",
             "check_interval": 60,
             "state_file": tempfile.mktemp(),
@@ -34,7 +34,7 @@ class TestMastodonRSSBot(unittest.TestCase):
         """Test bot initializes with correct configuration"""
         bot = MastodonRSSBot(**self.test_config)
 
-        self.assertEqual(bot.feed_url, self.test_config["feed_url"])
+        self.assertEqual(bot.feed_urls, self.test_config["feed_urls"])
         self.assertEqual(bot.toot_visibility, self.test_config["toot_visibility"])
         self.assertEqual(bot.check_interval, self.test_config["check_interval"])
         self.assertEqual(bot.state_file, self.test_config["state_file"])
@@ -170,10 +170,10 @@ class TestMastodonRSSBot(unittest.TestCase):
         mock_parse.return_value = mock_feed
 
         bot = MastodonRSSBot(**self.test_config)
-        feed = bot.parse_feed()
+        feed = bot.parse_feed("https://example.com/feed.xml")
 
         self.assertIsNotNone(feed)
-        mock_parse.assert_called_once_with(self.test_config["feed_url"])
+        mock_parse.assert_called_once_with("https://example.com/feed.xml")
 
     @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
@@ -182,7 +182,7 @@ class TestMastodonRSSBot(unittest.TestCase):
         mock_parse.side_effect = Exception("Network error")
 
         bot = MastodonRSSBot(**self.test_config)
-        feed = bot.parse_feed()
+        feed = bot.parse_feed("https://example.com/feed.xml")
 
         self.assertIsNone(feed)
 
@@ -225,6 +225,31 @@ class TestMastodonRSSBot(unittest.TestCase):
         # Verify entries were saved
         saved_entries = bot.load_processed_entries()
         self.assertEqual(len(saved_entries), 3)
+
+    @patch("bot.feedparser.parse")
+    @patch("bot.Mastodon")
+    def test_process_new_entries_multiple_feeds(self, mock_mastodon, mock_parse):
+        """Test processing with multiple feeds"""
+        self.test_config["feed_urls"] = ["http://feed1.com", "http://feed2.com"]
+
+        def side_effect(url):
+            mock = Mock()
+            if url == "http://feed1.com":
+                mock.entries = [{"title": "1", "link": "http://link1.com"}]
+            else:
+                mock.entries = [{"title": "2", "link": "http://link2.com"}]
+            return mock
+
+        mock_parse.side_effect = side_effect
+
+        mock_instance = Mock()
+        mock_mastodon.return_value = mock_instance
+
+        bot = MastodonRSSBot(**self.test_config)
+        count = bot.process_new_entries()
+
+        self.assertEqual(count, 2)
+        self.assertEqual(mock_parse.call_count, 2)
 
     @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
@@ -330,8 +355,8 @@ class TestMainEntry(unittest.TestCase):
         },
     )
     @patch("main.MastodonRSSBot")
-    def test_main_loads_environment_config(self, mock_bot_class):
-        """Test that main() loads configuration from environment"""
+    def test_main_loads_legacy_environment_config(self, mock_bot_class):
+        """Test that main() loads configuration from legacy environment variable"""
         from main import main
 
         mock_bot_instance = Mock()
@@ -349,11 +374,43 @@ class TestMainEntry(unittest.TestCase):
             client_secret="test_secret",
             access_token="test_token",
             instance_url="https://mastodon.test",
-            feed_url="https://example.com/feed.xml",
+            feed_urls=["https://example.com/feed.xml"],
             toot_visibility="unlisted",
             check_interval=120,
             state_file="/tmp/test_state.txt",
         )
+
+    @patch.dict(
+        os.environ,
+        {
+            "MASTODON_CLIENT_ID": "test_id",
+            "MASTODON_CLIENT_SECRET": "test_secret",
+            "MASTODON_ACCESS_TOKEN": "test_token",
+            "MASTODON_INSTANCE_URL": "https://mastodon.test",
+            "RSS_FEEDS": "http://feed1.com, http://feed2.com",
+            # No RSS_FEED_URL
+            "TOOT_VISIBILITY": "public",
+        },
+    )
+    @patch("main.MastodonRSSBot")
+    def test_main_loads_multiple_feeds_env(self, mock_bot_class):
+        """Test that main() loads multiple feeds from environment variable"""
+        # Ensure RSS_FEED_URL is not set from previous tests or env
+        if "RSS_FEED_URL" in os.environ:
+            del os.environ["RSS_FEED_URL"]
+
+        from main import main
+        mock_bot_instance = Mock()
+        mock_bot_class.return_value = mock_bot_instance
+
+        try:
+            main()
+        except Exception:
+            pass
+
+        mock_bot_class.assert_called_once()
+        _, kwargs = mock_bot_class.call_args
+        self.assertEqual(kwargs["feed_urls"], ["http://feed1.com", "http://feed2.com"])
 
 
 if __name__ == "__main__":

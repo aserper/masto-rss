@@ -88,6 +88,28 @@ Then run:
 docker-compose up -d
 ```
 
+
+### Multiple Feeds
+To monitor multiple feeds, you can either:
+- Use the `RSS_FEEDS` environment variable (comma-separated list)
+- Use the `FEEDS_FILE` environment variable (path to file with one URL per line)
+
+#### Run with Multiple Feeds (Docker)
+
+```bash
+docker run -d \
+  --name masto-rss-bot \
+  -e MASTODON_CLIENT_ID="your_client_id" \
+  -e MASTODON_CLIENT_SECRET="your_client_secret" \
+  -e MASTODON_ACCESS_TOKEN="your_access_token" \
+  -e MASTODON_INSTANCE_URL="https://mastodon.social" \
+  -e RSS_FEEDS="https://feed1.com/rss,https://feed2.com/rss" \
+  -e TOOT_VISIBILITY="public" \
+  -e CHECK_INTERVAL="300" \
+  -v /path/to/state:/state \
+  amitserper/masto-rss:latest
+```
+
 ## Configuration
 
 All configuration is done via environment variables:
@@ -98,9 +120,14 @@ All configuration is done via environment variables:
 | `MASTODON_CLIENT_SECRET` | Mastodon application client secret | Yes | `xyz789...` |
 | `MASTODON_ACCESS_TOKEN` | Mastodon access token | Yes | `token123...` |
 | `MASTODON_INSTANCE_URL` | URL of your Mastodon instance | Yes | `https://mastodon.social` |
-| `RSS_FEED_URL` | URL of the RSS/Atom feed to monitor | Yes | `https://example.com/feed.xml` |
+| `RSS_FEED_URL` | Single RSS/Atom feed URL (Legacy) | No* | `https://example.com/feed.xml` |
+| `RSS_FEEDS` | Comma-separated list of feed URLs | No* | `https://site1.com,https://site2.com` |
+| `FEEDS_FILE` | Path to file containing list of feed URLs | No* | `/config/feeds.txt` |
 | `TOOT_VISIBILITY` | Post visibility level | Yes | `public`, `unlisted`, `private`, or `direct` |
 | `CHECK_INTERVAL` | Seconds between feed checks | Yes | `300` (5 minutes) |
+| `PROCESSED_ENTRIES_FILE`| Custom path for state file | No | `/state/processed.txt` |
+
+\* At least one of `RSS_FEED_URL`, `RSS_FEEDS`, or `FEEDS_FILE` must be provided.
 
 ### Getting Mastodon API Credentials
 

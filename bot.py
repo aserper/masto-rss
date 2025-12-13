@@ -16,7 +16,7 @@ class MastodonRSSBot:
         client_secret: str,
         access_token: str,
         instance_url: str,
-        feed_url: str,
+        feed_urls: list[str],
         toot_visibility: str = "public",
         check_interval: int = 300,
         state_file: str = "/state/processed_entries.txt",
@@ -29,12 +29,12 @@ class MastodonRSSBot:
             client_secret: Mastodon application client secret
             access_token: Mastodon access token
             instance_url: URL of the Mastodon instance
-            feed_url: URL of the RSS/Atom feed to monitor
+            feed_urls: List of URLs of the RSS/Atom feeds to monitor
             toot_visibility: Visibility level for posts ('public', 'unlisted', 'private', 'direct')
             check_interval: Seconds between feed checks
             state_file: Path to file storing processed entry URLs
         """
-        self.feed_url = feed_url
+        self.feed_urls = feed_urls
         self.toot_visibility = toot_visibility
         self.check_interval = check_interval
         self.state_file = state_file
@@ -73,20 +73,23 @@ class MastodonRSSBot:
         with open(self.state_file, "w") as file:
             file.write("\n".join(sorted(processed_entries)))
 
-    def parse_feed(self) -> Optional[feedparser.FeedParserDict]:
+    def parse_feed(self, feed_url: str) -> Optional[feedparser.FeedParserDict]:
         """
         Parse the RSS feed.
+
+        Args:
+            feed_url: URL of the feed to parse
 
         Returns:
             Parsed feed object or None if parsing fails
         """
         try:
-            feed = feedparser.parse(self.feed_url)
+            feed = feedparser.parse(feed_url)
             if hasattr(feed, "bozo_exception"):
-                print(f"Warning: Feed parsing issue: {feed.bozo_exception}")
+                print(f"Warning: Feed parsing issue for {feed_url}: {feed.bozo_exception}")
             return feed
         except Exception as e:
-            print(f"Error parsing feed: {e}")
+            print(f"Error parsing feed {feed_url}: {e}")
             return None
 
     def format_status(self, entry: feedparser.FeedParserDict) -> str:
@@ -120,22 +123,21 @@ class MastodonRSSBot:
             print(f"Error posting to Mastodon: {e}")
             return False
 
-    def process_new_entries(self) -> int:
+    def process_feed(self, feed_url: str, processed_entries: Set[str]) -> int:
         """
-        Check for new feed entries and post them to Mastodon.
+        Process a single feed for new entries.
+
+        Args:
+            feed_url: URL of the feed to process
+            processed_entries: Set of already processed entry URLs
 
         Returns:
             Number of new entries posted
         """
-        print("Checking for new RSS items...")
-
-        # Load processed entries
-        processed_entries = self.load_processed_entries()
-
-        # Parse feed
-        feed = self.parse_feed()
+        print(f"Checking feed: {feed_url}")
+        feed = self.parse_feed(feed_url)
         if not feed or not hasattr(feed, "entries"):
-            print("No entries found in feed")
+            print(f"No entries found in feed: {feed_url}")
             return 0
 
         new_entries_count = 0
@@ -161,10 +163,30 @@ class MastodonRSSBot:
                 else:
                     print(f"Failed to post entry: {title}")
 
-        # Save updated state
-        self.save_processed_entries(processed_entries)
-
         return new_entries_count
+
+    def process_new_entries(self) -> int:
+        """
+        Check for new feed entries in all feeds and post them to Mastodon.
+
+        Returns:
+            Total number of new entries posted across all feeds
+        """
+        print("Checking for new RSS items...")
+
+        # Load processed entries
+        processed_entries = self.load_processed_entries()
+
+        total_new_entries = 0
+
+        for feed_url in self.feed_urls:
+            total_new_entries += self.process_feed(feed_url, processed_entries)
+
+        # Save updated state
+        if total_new_entries > 0:
+            self.save_processed_entries(processed_entries)
+
+        return total_new_entries
 
     def run(self) -> None:
         """
