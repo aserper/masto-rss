@@ -22,7 +22,7 @@ def main():
         ),
     )
 
-    print(f"Bot configured successfully:")
+    print("Bot configured successfully:")
     print(f"  Instance: {os.environ['MASTODON_INSTANCE_URL']}")
     print(f"  Feed URL: {os.environ['RSS_FEED_URL']}")
     print(f"  Visibility: {os.environ.get('TOOT_VISIBILITY', 'public')}")
