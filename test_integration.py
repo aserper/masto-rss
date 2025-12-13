@@ -5,7 +5,6 @@ from unittest.mock import Mock, patch
 import tempfile
 import os
 import time
-from textwrap import dedent
 from bot import MastodonRSSBot
 import responses
 import feedparser
@@ -37,26 +36,24 @@ class TestRSSFeedIntegration(unittest.TestCase):
     def test_end_to_end_rss_to_mastodon(self, mock_mastodon):
         """Test complete flow from RSS feed to Mastodon post"""
         # Mock RSS feed response
-        rss_feed = dedent(
-            """<?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0">
-            <channel>
-                <title>Test Feed</title>
-                <link>https://example.com</link>
-                <description>Test RSS Feed</description>
-                <item>
-                    <title>First Article</title>
-                    <link>https://example.com/article1</link>
-                    <description>This is the first article</description>
-                </item>
-                <item>
-                    <title>Second Article</title>
-                    <link>https://example.com/article2</link>
-                    <description>This is the second article</description>
-                </item>
-            </channel>
-        </rss>"""
-        ).strip()
+        rss_feed = """<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Test Feed</title>
+        <link>https://example.com</link>
+        <description>Test RSS Feed</description>
+        <item>
+            <title>First Article</title>
+            <link>https://example.com/article1</link>
+            <description>This is the first article</description>
+        </item>
+        <item>
+            <title>Second Article</title>
+            <link>https://example.com/article2</link>
+            <description>This is the second article</description>
+        </item>
+    </channel>
+</rss>"""
 
         responses.add(
             responses.GET,
@@ -89,21 +86,19 @@ class TestRSSFeedIntegration(unittest.TestCase):
     @patch("bot.Mastodon")
     def test_atom_feed_parsing(self, mock_mastodon):
         """Test parsing Atom feeds"""
-        atom_feed = dedent(
-            """<?xml version="1.0" encoding="UTF-8"?>
-        <feed xmlns="http://www.w3.org/2005/Atom">
-            <title>Test Atom Feed</title>
-            <link href="https://example.com"/>
-            <updated>2024-01-01T00:00:00Z</updated>
-            <entry>
-                <title>Atom Article</title>
-                <link href="https://example.com/atom1"/>
-                <id>https://example.com/atom1</id>
-                <updated>2024-01-01T00:00:00Z</updated>
-                <summary>This is an atom article</summary>
-            </entry>
-        </feed>"""
-        ).strip()
+        atom_feed = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Test Atom Feed</title>
+    <link href="https://example.com"/>
+    <updated>2024-01-01T00:00:00Z</updated>
+    <entry>
+        <title>Atom Article</title>
+        <link href="https://example.com/atom1"/>
+        <id>https://example.com/atom1</id>
+        <updated>2024-01-01T00:00:00Z</updated>
+        <summary>This is an atom article</summary>
+    </entry>
+</feed>"""
 
         responses.add(
             responses.GET,
@@ -127,18 +122,16 @@ class TestRSSFeedIntegration(unittest.TestCase):
     @patch("bot.Mastodon")
     def test_persistence_across_runs(self, mock_mastodon):
         """Test that processed entries persist across multiple bot runs"""
-        rss_feed = dedent(
-            """<?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0">
-            <channel>
-                <title>Test Feed</title>
-                <item>
-                    <title>Article 1</title>
-                    <link>https://example.com/1</link>
-                </item>
-            </channel>
-        </rss>"""
-        ).strip()
+        rss_feed = """<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Test Feed</title>
+        <item>
+            <title>Article 1</title>
+            <link>https://example.com/1</link>
+        </item>
+    </channel>
+</rss>"""
 
         responses.add(
             responses.GET,
@@ -169,22 +162,20 @@ class TestRSSFeedIntegration(unittest.TestCase):
     def test_incremental_feed_updates(self, mock_mastodon):
         """Test handling of new entries added to feed over time"""
         # Initial feed with 2 articles
-        initial_feed = dedent(
-            """<?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0">
-            <channel>
-                <title>Test Feed</title>
-                <item>
-                    <title>Article 1</title>
-                    <link>https://example.com/1</link>
-                </item>
-                <item>
-                    <title>Article 2</title>
-                    <link>https://example.com/2</link>
-                </item>
-            </channel>
-        </rss>"""
-        ).strip()
+        initial_feed = """<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Test Feed</title>
+        <item>
+            <title>Article 1</title>
+            <link>https://example.com/1</link>
+        </item>
+        <item>
+            <title>Article 2</title>
+            <link>https://example.com/2</link>
+        </item>
+    </channel>
+</rss>"""
 
         responses.add(
             responses.GET,
@@ -204,26 +195,24 @@ class TestRSSFeedIntegration(unittest.TestCase):
 
         # Update feed with 1 new article
         responses.reset()
-        updated_feed = dedent(
-            """<?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0">
-            <channel>
-                <title>Test Feed</title>
-                <item>
-                    <title>Article 3</title>
-                    <link>https://example.com/3</link>
-                </item>
-                <item>
-                    <title>Article 2</title>
-                    <link>https://example.com/2</link>
-                </item>
-                <item>
-                    <title>Article 1</title>
-                    <link>https://example.com/1</link>
-                </item>
-            </channel>
-        </rss>"""
-        ).strip()
+        updated_feed = """<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Test Feed</title>
+        <item>
+            <title>Article 3</title>
+            <link>https://example.com/3</link>
+        </item>
+        <item>
+            <title>Article 2</title>
+            <link>https://example.com/2</link>
+        </item>
+        <item>
+            <title>Article 1</title>
+            <link>https://example.com/1</link>
+        </item>
+    </channel>
+</rss>"""
 
         responses.add(
             responses.GET,
