@@ -86,7 +86,9 @@ class MastodonRSSBot:
         try:
             feed = feedparser.parse(feed_url)
             if hasattr(feed, "bozo_exception"):
-                print(f"Warning: Feed parsing issue for {feed_url}: {feed.bozo_exception}")
+                print(
+                    f"Warning: Feed parsing issue for {feed_url}: {feed.bozo_exception}"
+                )
             return feed
         except Exception as e:
             print(f"Error parsing feed {feed_url}: {e}")
