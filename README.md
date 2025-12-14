@@ -3,7 +3,6 @@
 # Masto-RSS
 
 [![CI/CD](https://img.shields.io/github/actions/workflow/status/aserper/masto-rss/ci.yml?style=for-the-badge&logo=github&label=CI/CD)](https://github.com/aserper/masto-rss/actions/workflows/ci.yml)
-[![Codecov](https://img.shields.io/codecov/c/github/aserper/masto-rss?style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/gh/aserper/masto-rss)
 [![Docker Hub](https://img.shields.io/badge/docker%20hub-amitserper%2Fmasto--rss-blue?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/amitserper/masto-rss)
 [![GHCR](https://img.shields.io/badge/ghcr.io-masto--rss-blue?style=for-the-badge&logo=docker&logoColor=white)](https://github.com/aserper/masto-rss/pkgs/container/masto-rss)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-yellow.svg?style=for-the-badge)](LICENSE)
