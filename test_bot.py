@@ -52,7 +52,7 @@ class TestMastodonRSSBot(unittest.TestCase):
     def test_save_processed_entries_error(self, mock_mastodon):
         """Test error handling when saving processed entries fails"""
         bot = MastodonRSSBot(**self.test_config)
-        
+
         # Mock Path.write_text to raise exception
         with patch.object(Path, "write_text", side_effect=Exception("Disk full")):
             # Should not raise exception
@@ -70,17 +70,17 @@ class TestMastodonRSSBot(unittest.TestCase):
         feed = bot.parse_feed("https://example.com/feed.xml")
 
         self.assertIsNotNone(feed)
-        # We can't easily assert the log/print was called without mocking logging, 
+        # We can't easily assert the log/print was called without mocking logging,
         # but execution flow is covered.
 
     @patch("bot.Mastodon")
     def test_run_keyboard_interrupt(self, mock_mastodon):
         """Test clean exit on KeyboardInterrupt"""
         bot = MastodonRSSBot(**self.test_config)
-        
+
         # Mock process_new_entries to raise KeyboardInterrupt
         bot.process_new_entries = Mock(side_effect=KeyboardInterrupt)
-        
+
         # Should exit cleanly
         bot.run()
         bot.process_new_entries.assert_called_once()
@@ -90,12 +90,14 @@ class TestMastodonRSSBot(unittest.TestCase):
     def test_run_exception_retry(self, mock_mastodon, mock_sleep):
         """Test retry logic on exception in main loop"""
         bot = MastodonRSSBot(**self.test_config)
-        
+
         # Raise exception once, then KeyboardInterrupt to exit loop
-        bot.process_new_entries = Mock(side_effect=[Exception("Network Error"), KeyboardInterrupt])
-        
+        bot.process_new_entries = Mock(
+            side_effect=[Exception("Network Error"), KeyboardInterrupt]
+        )
+
         bot.run()
-        
+
         self.assertEqual(bot.process_new_entries.call_count, 2)
         mock_sleep.assert_called_with(bot.check_interval)
 
@@ -107,6 +109,7 @@ class TestMainEntry(unittest.TestCase):
     def test_config_missing_vars(self):
         """Test Config raises ValueError when env vars are missing"""
         from main import Config
+
         with self.assertRaises(ValueError):
             Config.from_env()
 
@@ -123,6 +126,7 @@ class TestMainEntry(unittest.TestCase):
     def test_config_no_feeds(self):
         """Test Config raises ValueError when no feeds are configured"""
         from main import Config
+
         with self.assertRaises(ValueError):
             Config.from_env()
 
@@ -139,6 +143,7 @@ class TestMainEntry(unittest.TestCase):
     def test_config_feed_file_error(self):
         """Test Config handles missing/bad feeds file gracefully (logs warning but continues check)"""
         from main import Config
+
         # Should raise ValueError ultimately because no feeds are found,
         # but cover the file reading path
         with self.assertRaises(ValueError) as cm:

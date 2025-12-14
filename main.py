@@ -3,7 +3,7 @@ import os
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 from bot import MastodonRSSBot
 
@@ -11,7 +11,7 @@ from bot import MastodonRSSBot
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)]
+    handlers=[logging.StreamHandler(sys.stdout)],
 )
 logger = logging.getLogger(__name__)
 
@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Config:
     """Configuration loaded from environment variables."""
+
     instance_url: str
     client_id: str
     client_secret: str
@@ -26,7 +27,9 @@ class Config:
     feed_urls: List[str] = field(default_factory=list)
     toot_visibility: str = "public"
     check_interval: int = 300
-    state_file: Path = field(default_factory=lambda: Path("/state/processed_entries.txt"))
+    state_file: Path = field(
+        default_factory=lambda: Path("/state/processed_entries.txt")
+    )
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -38,18 +41,22 @@ class Config:
 
         if not all([instance_url, client_id, client_secret, access_token]):
             missing = [
-                k for k, v in {
+                k
+                for k, v in {
                     "MASTODON_INSTANCE_URL": instance_url,
                     "MASTODON_CLIENT_ID": client_id,
                     "MASTODON_CLIENT_SECRET": client_secret,
-                    "MASTODON_ACCESS_TOKEN": access_token
-                }.items() if not v
+                    "MASTODON_ACCESS_TOKEN": access_token,
+                }.items()
+                if not v
             ]
-            raise ValueError(f"Missing required environment variables: {', '.join(missing)}")
+            raise ValueError(
+                f"Missing required environment variables: {', '.join(missing)}"
+            )
 
         # Parse feeds
         feed_urls = []
-        
+
         # 1. Legacy single feed URL
         if os.environ.get("RSS_FEED_URL"):
             feed_urls.append(os.environ["RSS_FEED_URL"])
@@ -83,17 +90,21 @@ class Config:
         unique_feed_urls = list(dict.fromkeys(feed_urls))
 
         if not unique_feed_urls:
-            raise ValueError("No RSS feeds configured. Please set RSS_FEED_URL, RSS_FEEDS, or FEEDS_FILE.")
+            raise ValueError(
+                "No RSS feeds configured. Please set RSS_FEED_URL, RSS_FEEDS, or FEEDS_FILE."
+            )
 
         return cls(
             instance_url=instance_url,  # type: ignore # checked above
-            client_id=client_id,        # type: ignore
-            client_secret=client_secret,# type: ignore
+            client_id=client_id,  # type: ignore
+            client_secret=client_secret,  # type: ignore
             access_token=access_token,  # type: ignore
             feed_urls=unique_feed_urls,
             toot_visibility=os.environ.get("TOOT_VISIBILITY", "public"),
             check_interval=int(os.environ.get("CHECK_INTERVAL", "300")),
-            state_file=Path(os.environ.get("PROCESSED_ENTRIES_FILE", "/state/processed_entries.txt"))
+            state_file=Path(
+                os.environ.get("PROCESSED_ENTRIES_FILE", "/state/processed_entries.txt")
+            ),
         )
 
 
