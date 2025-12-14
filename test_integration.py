@@ -65,9 +65,7 @@ class TestRSSFeedIntegration(unittest.TestCase):
         """Test parsing Atom feeds"""
         # Create mock Atom feed object
         mock_feed = Mock()
-        mock_feed.entries = [
-            {"title": "Atom Article", "link": "https://example.com/atom1"}
-        ]
+        mock_feed.entries = [{"title": "Atom Article", "link": "https://example.com/atom1"}]
         mock_parse.return_value = mock_feed
 
         mock_instance = Mock()

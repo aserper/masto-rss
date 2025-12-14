@@ -27,9 +27,7 @@ class Config:
     feed_urls: List[str] = field(default_factory=list)
     toot_visibility: str = "public"
     check_interval: int = 300
-    state_file: Path = field(
-        default_factory=lambda: Path("/state/processed_entries.txt")
-    )
+    state_file: Path = field(default_factory=lambda: Path("/state/processed_entries.txt"))
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -50,9 +48,7 @@ class Config:
                 }.items()
                 if not v
             ]
-            raise ValueError(
-                f"Missing required environment variables: {', '.join(missing)}"
-            )
+            raise ValueError(f"Missing required environment variables: {', '.join(missing)}")
 
         # Parse feeds
         feed_urls = []
@@ -63,9 +59,7 @@ class Config:
 
         # 2. Comma-separated list of feeds
         if os.environ.get("RSS_FEEDS"):
-            feeds = [
-                url.strip() for url in os.environ["RSS_FEEDS"].split(",") if url.strip()
-            ]
+            feeds = [url.strip() for url in os.environ["RSS_FEEDS"].split(",") if url.strip()]
             feed_urls.extend(feeds)
 
         # 3. File containing list of feeds
@@ -75,11 +69,7 @@ class Config:
             if path.exists():
                 try:
                     content = path.read_text().splitlines()
-                    file_feeds = [
-                        line.strip()
-                        for line in content
-                        if line.strip() and not line.startswith("#")
-                    ]
+                    file_feeds = [line.strip() for line in content if line.strip() and not line.startswith("#")]
                     feed_urls.extend(file_feeds)
                 except Exception as e:
                     logger.error(f"Error reading feeds file {feeds_file}: {e}")
@@ -90,9 +80,7 @@ class Config:
         unique_feed_urls = list(dict.fromkeys(feed_urls))
 
         if not unique_feed_urls:
-            raise ValueError(
-                "No RSS feeds configured. Please set RSS_FEED_URL, RSS_FEEDS, or FEEDS_FILE."
-            )
+            raise ValueError("No RSS feeds configured. Please set RSS_FEED_URL, RSS_FEEDS, or FEEDS_FILE.")
 
         return cls(
             instance_url=instance_url,  # type: ignore # checked above
@@ -102,9 +90,7 @@ class Config:
             feed_urls=unique_feed_urls,
             toot_visibility=os.environ.get("TOOT_VISIBILITY", "public"),
             check_interval=int(os.environ.get("CHECK_INTERVAL", "300")),
-            state_file=Path(
-                os.environ.get("PROCESSED_ENTRIES_FILE", "/state/processed_entries.txt")
-            ),
+            state_file=Path(os.environ.get("PROCESSED_ENTRIES_FILE", "/state/processed_entries.txt")),
         )
 
 
