@@ -94,14 +94,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements-test.txt
 
-    - name: Run flake8
+    - name: Run ruff check
       run: |
-        flake8 bot.py main.py --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 bot.py main.py --count --max-complexity=10 --max-line-length=127 --statistics
+        ruff check .
 
-    - name: Run black check
+    - name: Run ruff format
       run: |
-        black --check bot.py main.py test_bot.py test_integration.py
+        ruff format --check .
 
     - name: Run mypy
       run: |
