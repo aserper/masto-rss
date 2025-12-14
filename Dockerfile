@@ -1,11 +1,14 @@
-# Use an appropriate base image with Python pre-installed
-FROM alpine:3.18
+# Use python-slim for better wheel compatibility and stability while maintaining small size
+FROM python:3.12-slim
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install Python dependencies in a single layer
-RUN apk add --no-cache python3 py3-pip
+# Install runtime dependencies
+# libmagic1 is required by python-magic (dependency of Mastodon.py)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libmagic1 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better layer caching
 COPY requirements.txt /app/
