@@ -1,10 +1,16 @@
 """Mastodon RSS Bot - Core functionality"""
 
-import feedparser
-from mastodon import Mastodon
+import logging
 import os
 import time
-from typing import Set, Optional
+from pathlib import Path
+from typing import List, Optional, Set
+
+import feedparser
+from mastodon import Mastodon
+
+# Configure logging for this module
+logger = logging.getLogger(__name__)
 
 
 class MastodonRSSBot:
@@ -16,10 +22,10 @@ class MastodonRSSBot:
         client_secret: str,
         access_token: str,
         instance_url: str,
-        feed_urls: list[str],
+        feed_urls: List[str],
         toot_visibility: str = "public",
         check_interval: int = 300,
-        state_file: str = "/state/processed_entries.txt",
+        state_file: Path = Path("/state/processed_entries.txt"),
     ):
         """
         Initialize the Mastodon RSS bot.
@@ -37,7 +43,7 @@ class MastodonRSSBot:
         self.feed_urls = feed_urls
         self.toot_visibility = toot_visibility
         self.check_interval = check_interval
-        self.state_file = state_file
+        self.state_file = Path(state_file)
 
         # Initialize Mastodon client
         self.mastodon = Mastodon(
@@ -54,10 +60,13 @@ class MastodonRSSBot:
         Returns:
             Set of URLs that have been processed
         """
+        if not self.state_file.exists():
+            return set()
+
         try:
-            with open(self.state_file, "r") as file:
-                return set(file.read().splitlines())
-        except FileNotFoundError:
+            return set(self.state_file.read_text().splitlines())
+        except Exception as e:
+            logger.error(f"Error loading processed entries from {self.state_file}: {e}")
             return set()
 
     def save_processed_entries(self, processed_entries: Set[str]) -> None:
@@ -68,10 +77,11 @@ class MastodonRSSBot:
             processed_entries: Set of processed entry URLs
         """
         # Ensure directory exists
-        os.makedirs(os.path.dirname(self.state_file), exist_ok=True)
-
-        with open(self.state_file, "w") as file:
-            file.write("\n".join(sorted(processed_entries)))
+        try:
+            self.state_file.parent.mkdir(parents=True, exist_ok=True)
+            self.state_file.write_text("\n".join(sorted(processed_entries)))
+        except Exception as e:
+            logger.error(f"Error saving processed entries to {self.state_file}: {e}")
 
     def parse_feed(self, feed_url: str) -> Optional[feedparser.FeedParserDict]:
         """
@@ -86,12 +96,12 @@ class MastodonRSSBot:
         try:
             feed = feedparser.parse(feed_url)
             if hasattr(feed, "bozo_exception"):
-                print(
-                    f"Warning: Feed parsing issue for {feed_url}: {feed.bozo_exception}"
+                logger.warning(
+                    f"Feed parsing issue for {feed_url}: {feed.bozo_exception}"
                 )
             return feed
         except Exception as e:
-            print(f"Error parsing feed {feed_url}: {e}")
+            logger.error(f"Error parsing feed {feed_url}: {e}")
             return None
 
     def format_status(self, entry: feedparser.FeedParserDict) -> str:
@@ -122,7 +132,7 @@ class MastodonRSSBot:
             self.mastodon.status_post(status, visibility=self.toot_visibility)
             return True
         except Exception as e:
-            print(f"Error posting to Mastodon: {e}")
+            logger.error(f"Error posting to Mastodon: {e}")
             return False
 
     def process_feed(self, feed_url: str, processed_entries: Set[str]) -> int:
@@ -136,10 +146,10 @@ class MastodonRSSBot:
         Returns:
             Number of new entries posted
         """
-        print(f"Checking feed: {feed_url}")
+        logger.info(f"Checking feed: {feed_url}")
         feed = self.parse_feed(feed_url)
         if not feed or not hasattr(feed, "entries"):
-            print(f"No entries found in feed: {feed_url}")
+            logger.warning(f"No entries found in feed: {feed_url}")
             return 0
 
         new_entries_count = 0
@@ -149,13 +159,13 @@ class MastodonRSSBot:
             entry_url = entry.get("link", "")
 
             if not entry_url:
-                print("Skipping entry without URL")
+                logger.debug("Skipping entry without URL")
                 continue
 
             # Check if entry is new
             if entry_url not in processed_entries:
                 title = entry.get("title", "Untitled")
-                print(f"Found a new RSS item: {title}")
+                logger.info(f"Found a new RSS item: {title}")
 
                 # Format and post status
                 status = self.format_status(entry)
@@ -163,7 +173,7 @@ class MastodonRSSBot:
                     processed_entries.add(entry_url)
                     new_entries_count += 1
                 else:
-                    print(f"Failed to post entry: {title}")
+                    logger.error(f"Failed to post entry: {title}")
 
         return new_entries_count
 
@@ -174,7 +184,7 @@ class MastodonRSSBot:
         Returns:
             Total number of new entries posted across all feeds
         """
-        print("Checking for new RSS items...")
+        logger.info("Checking for new RSS items...")
 
         # Load processed entries
         processed_entries = self.load_processed_entries()
@@ -198,15 +208,15 @@ class MastodonRSSBot:
             try:
                 count = self.process_new_entries()
                 if count > 0:
-                    print(f"Posted {count} new entries")
+                    logger.info(f"Posted {count} new entries")
 
-                print(f"Sleeping for {self.check_interval} seconds...")
+                logger.info(f"Sleeping for {self.check_interval} seconds...")
                 time.sleep(self.check_interval)
 
             except KeyboardInterrupt:
-                print("\nBot stopped by user")
+                logger.info("Bot stopped by user")
                 break
             except Exception as e:
-                print(f"Error in main loop: {e}")
-                print(f"Retrying in {self.check_interval} seconds...")
+                logger.error(f"Error in main loop: {e}", exc_info=True)
+                logger.info(f"Retrying in {self.check_interval} seconds...")
                 time.sleep(self.check_interval)
