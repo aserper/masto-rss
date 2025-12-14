@@ -2,12 +2,12 @@
 
 # Masto-RSS
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/aserper/masto-rss/masto-rss.yml?style=for-the-badge&logo=github&label=Build)](https://github.com/aserper/masto-rss/actions/workflows/masto-rss.yml)
-[![Tests](https://img.shields.io/github/actions/workflow/status/aserper/masto-rss/test.yml?style=for-the-badge&logo=github&label=Tests)](https://github.com/aserper/masto-rss/actions/workflows/test.yml)
+[![CI/CD](https://img.shields.io/github/actions/workflow/status/aserper/masto-rss/ci.yml?style=for-the-badge&logo=github&label=CI/CD)](https://github.com/aserper/masto-rss/actions/workflows/ci.yml)
+[![Codecov](https://img.shields.io/codecov/c/github/aserper/masto-rss?style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/gh/aserper/masto-rss)
 [![Docker Hub](https://img.shields.io/badge/docker%20hub-amitserper%2Fmasto--rss-blue?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/amitserper/masto-rss)
 [![GHCR](https://img.shields.io/badge/ghcr.io-masto--rss-blue?style=for-the-badge&logo=docker&logoColor=white)](https://github.com/aserper/masto-rss/pkgs/container/masto-rss)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-yellow.svg?style=for-the-badge)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![GitHub stars](https://img.shields.io/github/stars/aserper/masto-rss.svg?style=social)](https://github.com/aserper/masto-rss)
 [![GitHub forks](https://img.shields.io/github/forks/aserper/masto-rss.svg?style=social&label=Fork)](https://github.com/aserper/masto-rss/network)
 
@@ -18,7 +18,7 @@ A simple, lightweight Mastodon bot that automatically posts updates from RSS fee
 - Automatically monitors RSS/Atom feeds and posts new items to Mastodon
 - Persistent state tracking to avoid duplicate posts
 - Configurable post visibility (public, unlisted, private, direct)
-- Lightweight Alpine-based Docker image
+- Lightweight Python Slim-based Docker image
 - Multiarch support (amd64 & arm64) for broad compatibility
 - Continuous monitoring with configurable check intervals
 
@@ -199,7 +199,7 @@ python main.py
 
 ## Architecture
 
-- **Base Image:** Alpine Linux 3.18 (minimal footprint)
+- **Base Image:** Python 3.12-slim (stable & compatible)
 - **Python Version:** 3.10+
 - **Platforms:** linux/amd64, linux/arm64
 - **Dependencies:** feedparser, mastodon.py (see [requirements.txt](requirements.txt))
