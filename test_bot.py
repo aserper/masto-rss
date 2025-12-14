@@ -158,9 +158,11 @@ class TestMastodonRSSBot(unittest.TestCase):
         bot = MastodonRSSBot(**self.test_config)
         bot.feed_urls = ["http://feed1.com", "http://feed2.com"]
 
-        with patch.object(bot, "load_processed_entries", return_value=set()), patch.object(
-            bot, "process_feed", side_effect=[1, 2]
-        ) as mock_process, patch.object(bot, "save_processed_entries") as mock_save:
+        with (
+            patch.object(bot, "load_processed_entries", return_value=set()),
+            patch.object(bot, "process_feed", side_effect=[1, 2]) as mock_process,
+            patch.object(bot, "save_processed_entries") as mock_save,
+        ):
             total = bot.process_new_entries()
 
             self.assertEqual(total, 3)

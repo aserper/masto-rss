@@ -24,14 +24,18 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
 
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "0.5.11"
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements-test.txt
+        uv sync --all-extras --dev
 
     - name: Run unit tests
       run: |
-        pytest test_bot.py -m "not integration" --cov=bot --cov=main --cov-report=xml --cov-report=term
+        uv run pytest test_bot.py -m "not integration" --cov=bot --cov=main --cov-report=xml --cov-report=term
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
@@ -58,14 +62,18 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
 
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "0.5.11"
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements-test.txt
+        uv sync --all-extras --dev
 
     - name: Run integration tests
       run: |
-        pytest test_integration.py --cov=bot --cov-report=xml --cov-report=term --cov-fail-under=70
+        uv run pytest test_integration.py --cov=bot --cov-report=xml --cov-report=term --cov-fail-under=70
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
@@ -89,22 +97,26 @@ jobs:
         python-version: '3.11'
         cache: 'pip'
 
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "0.5.11"
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements-test.txt
+        uv sync --all-extras --dev
 
     - name: Run ruff check
       run: |
-        ruff check .
+        uv run ruff check .
 
     - name: Run ruff format
       run: |
-        ruff format --check .
+        uv run ruff format --check .
 
     - name: Run mypy
       run: |
-        mypy bot.py main.py --ignore-missing-imports
+        uv run mypy bot.py main.py --ignore-missing-imports
       continue-on-error: true
 
   docker-build-test:
