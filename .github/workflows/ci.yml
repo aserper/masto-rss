@@ -142,8 +142,8 @@ jobs:
     - name: Test Docker image structure
       run: |
         docker run --rm masto-rss:test python --version
-        docker run --rm masto-rss:test pip list | grep feedparser
-        docker run --rm masto-rss:test pip list | grep Mastodon
+        docker run --rm masto-rss:test python -c "import feedparser; print(feedparser.__version__)"
+        docker run --rm masto-rss:test python -c "import mastodon; print(mastodon.__version__)"
 
   all-tests-pass:
     name: All Tests Passed
