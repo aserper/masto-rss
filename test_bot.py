@@ -101,6 +101,82 @@ class TestMastodonRSSBot(unittest.TestCase):
         self.assertEqual(bot.process_new_entries.call_count, 2)
         mock_sleep.assert_called_with(bot.check_interval)
 
+    @patch("bot.feedparser.parse")
+    @patch("bot.Mastodon")
+    def test_process_feed_new_entry(self, mock_mastodon, mock_parse):
+        """Test processing feed with a new entry"""
+        mock_feed = Mock()
+        mock_feed.entries = [
+            {"title": "New", "link": "http://new.com", "description": "desc"}
+        ]
+        mock_parse.return_value = mock_feed
+
+        # Mock instance
+        mock_instance = Mock()
+        mock_instance.status_post.return_value = {}
+        mock_mastodon.return_value = mock_instance
+
+        bot = MastodonRSSBot(**self.test_config)
+        processed = set()
+        count = bot.process_feed("http://feed.com", processed)
+
+        self.assertEqual(count, 1)
+        self.assertIn("http://new.com", processed)
+        mock_instance.status_post.assert_called_once()
+
+    @patch("bot.feedparser.parse")
+    @patch("bot.Mastodon")
+    def test_process_feed_existing_entry(self, mock_mastodon, mock_parse):
+        """Test processing feed with existing entry"""
+        mock_feed = Mock()
+        mock_feed.entries = [{"link": "http://old.com"}]
+        mock_parse.return_value = mock_feed
+
+        bot = MastodonRSSBot(**self.test_config)
+        processed = {"http://old.com"}
+        count = bot.process_feed("http://feed.com", processed)
+
+        self.assertEqual(count, 0)
+
+    @patch("bot.feedparser.parse")
+    @patch("bot.Mastodon")
+    def test_process_feed_post_failure(self, mock_mastodon, mock_parse):
+        """Test handling of post failure"""
+        mock_feed = Mock()
+        mock_feed.entries = [{"link": "http://fail.com"}]
+        mock_parse.return_value = mock_feed
+
+        mock_instance = Mock()
+        mock_instance.status_post.side_effect = Exception("API Error")
+        mock_mastodon.return_value = mock_instance
+
+        bot = MastodonRSSBot(**self.test_config)
+        processed = set()
+        count = bot.process_feed("http://feed.com", processed)
+
+        self.assertEqual(count, 0)
+        self.assertNotIn("http://fail.com", processed)
+
+    @patch("bot.Mastodon")
+    def test_process_new_entries_delegation(self, mock_mastodon):
+        """Test process_new_entries calls process_feed for each URL"""
+        bot = MastodonRSSBot(**self.test_config)
+        bot.feed_urls = ["http://feed1.com", "http://feed2.com"]
+
+        with patch.object(
+            bot, "load_processed_entries", return_value=set()
+        ), patch.object(
+            bot, "process_feed", side_effect=[1, 2]
+        ) as mock_process, patch.object(
+            bot, "save_processed_entries"
+        ) as mock_save:
+
+            total = bot.process_new_entries()
+
+            self.assertEqual(total, 3)
+            self.assertEqual(mock_process.call_count, 2)
+            mock_save.assert_called_once()
+
 
 class TestMainEntry(unittest.TestCase):
     """Test cases for main.py entry point"""
