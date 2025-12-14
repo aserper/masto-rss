@@ -9,6 +9,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-yellow.svg?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![GitHub stars](https://img.shields.io/github/stars/aserper/masto-rss.svg?style=social)](https://github.com/aserper/masto-rss)
+[![GitHub forks](https://img.shields.io/github/forks/aserper/masto-rss.svg?style=social&label=Fork)](https://github.com/aserper/masto-rss/network)
 
 A simple, lightweight Mastodon bot that automatically posts updates from RSS feeds to the Fediverse. Built with Python and designed to run seamlessly in Docker with multiarch support (amd64 & arm64).
 
