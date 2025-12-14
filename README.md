@@ -2,7 +2,7 @@
 
 A flexible and robust Python script to automatically post the latest entry from an RSS feed to Mastodon, designed to run continuously in a Docker container.
 
-This project is based on the original concept of [masto-rss](https://github.com/piko-system/masto-rss) but has been significantly rewritten and extended with modern features for stability and customization.
+This project is based on the original concept of [masto-rss](https://github.com/aserper/masto-rss) but has been significantly rewritten and extended with modern features for stability and customization.
 
 ## Features
 
@@ -154,5 +154,5 @@ To update to the latest version of the image from Docker Hub:
 
 ## Acknowledgements
 
-* This project is heavily inspired by and based on the original [masto-rss](https://github.com/piko-system/masto-rss). This version aims to add more robustness, flexibility, and ease of deployment using modern practices.
+* This project is heavily inspired by and based on the original [masto-rss](https://github.com/aserper/masto-rss). This version aims to add more robustness, flexibility, and ease of deployment using modern practices.
 * The Python script, Docker configuration, and this README were written and modified with the assistance of AI.
