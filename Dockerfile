@@ -19,6 +19,9 @@ COPY pyproject.toml uv.lock /app/
 # Install dependencies
 RUN uv sync --frozen --no-dev
 
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
+
 # Copy the application code
 COPY . /app
 
