@@ -1,12 +1,11 @@
 """Unit tests for Mastodon RSS Bot"""
 
 import unittest
-from unittest.mock import Mock, patch, mock_open, MagicMock
+from unittest.mock import Mock, patch
 import tempfile
 import os
 from pathlib import Path
 from bot import MastodonRSSBot
-import feedparser
 
 
 class TestMastodonRSSBot(unittest.TestCase):
@@ -92,9 +91,7 @@ class TestMastodonRSSBot(unittest.TestCase):
         bot = MastodonRSSBot(**self.test_config)
 
         # Raise exception once, then KeyboardInterrupt to exit loop
-        bot.process_new_entries = Mock(
-            side_effect=[Exception("Network Error"), KeyboardInterrupt]
-        )
+        bot.process_new_entries = Mock(side_effect=[Exception("Network Error"), KeyboardInterrupt])
 
         bot.run()
 
@@ -106,9 +103,7 @@ class TestMastodonRSSBot(unittest.TestCase):
     def test_process_feed_new_entry(self, mock_mastodon, mock_parse):
         """Test processing feed with a new entry"""
         mock_feed = Mock()
-        mock_feed.entries = [
-            {"title": "New", "link": "http://new.com", "description": "desc"}
-        ]
+        mock_feed.entries = [{"title": "New", "link": "http://new.com", "description": "desc"}]
         mock_parse.return_value = mock_feed
 
         # Mock instance
@@ -163,14 +158,9 @@ class TestMastodonRSSBot(unittest.TestCase):
         bot = MastodonRSSBot(**self.test_config)
         bot.feed_urls = ["http://feed1.com", "http://feed2.com"]
 
-        with patch.object(
-            bot, "load_processed_entries", return_value=set()
-        ), patch.object(
+        with patch.object(bot, "load_processed_entries", return_value=set()), patch.object(
             bot, "process_feed", side_effect=[1, 2]
-        ) as mock_process, patch.object(
-            bot, "save_processed_entries"
-        ) as mock_save:
-
+        ) as mock_process, patch.object(bot, "save_processed_entries") as mock_save:
             total = bot.process_new_entries()
 
             self.assertEqual(total, 3)

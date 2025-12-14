@@ -96,8 +96,8 @@ Tests run automatically on every push to `main` and on all pull requests via [.g
    - Uploads coverage to Codecov
 
 3. **Code Quality**
-   - Runs flake8 for linting
-   - Runs black for code formatting checks
+   - Runs ruff check for linting
+   - Runs ruff format for code formatting checks
    - Runs mypy for type checking
 
 4. **Docker Build Test**

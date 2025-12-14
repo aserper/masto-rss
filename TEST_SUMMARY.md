@@ -93,8 +93,7 @@ Comprehensive GitHub Actions workflow with **5 jobs**:
    - Uploads coverage to Codecov
 
 3. **Code Quality**
-   - Flake8 linting (error detection + complexity)
-   - Black formatting verification
+   - Ruff linting and formatting verification
    - Mypy type checking
 
 4. **Docker Build Test**
