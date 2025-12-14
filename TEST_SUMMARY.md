@@ -59,8 +59,8 @@ Contains **10+ integration tests** covering:
 - Test markers (unit, integration, slow)
 - Coverage exclusions
 
-#### [requirements-test.txt](requirements-test.txt)
-Test dependencies:
+#### [pyproject.toml](pyproject.toml)
+Test dependencies (managed by `uv`):
 - `pytest` - Testing framework
 - `pytest-cov` - Coverage plugin
 - `pytest-mock` - Mocking utilities

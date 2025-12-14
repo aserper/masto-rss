@@ -26,7 +26,8 @@ The test suite is organized into two main categories:
 
 ```bash
 # Install test dependencies
-pip install -r requirements-test.txt
+# Install dependencies
+uv sync --all-extras --dev
 ```
 
 ### Run All Tests
@@ -107,7 +108,7 @@ Tests run automatically on every push to `main` and on all pull requests via [.g
 
 5. **All Tests Pass**
    - Final job that requires all previous jobs to succeed
-   - Provides a single status check for PR requirements
+   - Provides a single status check
 
 ## Test Coverage Requirements
 
@@ -203,7 +204,7 @@ class TestNewIntegration(unittest.TestCase):
 
 ### Tests Fail Locally But Pass in CI
 - Ensure you're using the same Python version
-- Check that all dependencies are installed: `pip install -r requirements-test.txt`
+- Check that all dependencies are installed: `uv sync`
 - Clear pytest cache: `pytest --cache-clear`
 
 ### Coverage Below 80%
