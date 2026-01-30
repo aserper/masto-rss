@@ -3,6 +3,7 @@
 import logging
 import time
 from pathlib import Path
+import random
 from typing import List, Optional, Set
 
 import feedparser
@@ -24,7 +25,9 @@ class MastodonRSSBot:
         feed_urls: List[str],
         toot_visibility: str = "public",
         check_interval: int = 300,
+        notification_check_interval: int = 60,
         state_file: Path = Path("/state/processed_entries.txt"),
+        messages_file: Path = Path("sarcastic_messages.txt"),
     ):
         """
         Initialize the Mastodon RSS bot.
@@ -37,12 +40,22 @@ class MastodonRSSBot:
             feed_urls: List of URLs of the RSS/Atom feeds to monitor
             toot_visibility: Visibility level for posts ('public', 'unlisted', 'private', 'direct')
             check_interval: Seconds between feed checks
+            notification_check_interval: Seconds between notification checks
             state_file: Path to file storing processed entry URLs
+            messages_file: Path to file storing sarcastic messages
         """
         self.feed_urls = feed_urls
         self.toot_visibility = toot_visibility
         self.check_interval = check_interval
+        self.notification_check_interval = notification_check_interval
         self.state_file = Path(state_file)
+        self.messages_file = Path(messages_file)
+
+        # Load sarcastic messages
+        self.sarcastic_messages = self.load_sarcastic_messages()
+
+        # State for notification tracking
+        self.last_notification_id = None
 
         # Initialize Mastodon client
         self.mastodon = Mastodon(
@@ -51,6 +64,23 @@ class MastodonRSSBot:
             access_token=access_token,
             api_base_url=instance_url,
         )
+
+    def load_sarcastic_messages(self) -> List[str]:
+        """
+        Load sarcastic messages from the configured file.
+        Favorites fallback if file is missing.
+        """
+        if not self.messages_file.exists():
+            logger.warning(f"Messages file {self.messages_file} not found. Using defaults.")
+            return ["I am a bot. Beep boop."]
+
+        try:
+            messages = [line.strip() for line in self.messages_file.read_text().splitlines() if line.strip()]
+            logger.info(f"Loaded {len(messages)} sarcastic messages.")
+            return messages
+        except Exception as e:
+            logger.error(f"Error loading messages: {e}")
+            return ["I am a bot. Beep boop."]
 
     def load_processed_entries(self) -> Set[str]:
         """
@@ -197,23 +227,96 @@ class MastodonRSSBot:
 
         return total_new_entries
 
+    def check_notifications(self) -> None:
+        """
+        Check for mentions and reply with sarcasm.
+        """
+        try:
+            # First run, just get the latest ID so we don't reply to old stuff if we restart
+            if self.last_notification_id is None:
+                notes = self.mastodon.notifications(types=['mention'], limit=1)
+                if notes:
+                    self.last_notification_id = notes[0]['id']
+                else:
+                    self.last_notification_id = 0 # Start from beginning if no notes
+                return
+
+            notifications = self.mastodon.notifications(
+                types=['mention'],
+                since_id=self.last_notification_id
+            )
+
+            for note in notifications:
+                self.last_notification_id = max(self.last_notification_id, note['id'])
+                self.reply_to_mention(note)
+
+                # Dismiss notification so we don't see it again in UI (optional, but clean)
+                try:
+                    self.mastodon.notifications_dismiss(note['id'])
+                except Exception:
+                    pass
+
+        except Exception as e:
+            logger.error(f"Error checking notifications: {e}")
+
+    def reply_to_mention(self, notification) -> None:
+        """
+        Reply to a mention with a random sarcastic message.
+        """
+        status = notification.get('status')
+        if not status:
+            return
+
+        account = status.get('account')
+        if not account:
+            return
+
+        username = account.get('acct')
+        mention_text = f"@{username} {random.choice(self.sarcastic_messages)}"
+
+        logger.info(f"Responding to {username} with sarcasm.")
+
+        try:
+            self.mastodon.status_post(
+                mention_text,
+                in_reply_to_id=status['id'],
+                visibility=self.toot_visibility
+            )
+        except Exception as e:
+            logger.error(f"Failed to reply to {username}: {e}")
+
     def run(self) -> None:
         """
-        Main loop: continuously monitor the feed and post new entries.
+        Main loop: continuously monitor the feed and post new entries,
+        plus check for notifications.
         """
+        logger.info("Bot starting up...")
+
+        next_feed_check = 0
+        next_notification_check = 0
+
         while True:
             try:
-                count = self.process_new_entries()
-                if count > 0:
-                    logger.info(f"Posted {count} new entries")
+                current_time = time.time()
 
-                logger.info(f"Sleeping for {self.check_interval} seconds...")
-                time.sleep(self.check_interval)
+                # Check feeds
+                if current_time >= next_feed_check:
+                    count = self.process_new_entries()
+                    if count > 0:
+                        logger.info(f"Posted {count} new entries")
+                    next_feed_check = current_time + self.check_interval
+
+                # Check notifications
+                if current_time >= next_notification_check:
+                    self.check_notifications()
+                    next_notification_check = current_time + self.notification_check_interval
+
+                # Sleep a short time to prevent tight loop
+                time.sleep(1)
 
             except KeyboardInterrupt:
                 logger.info("Bot stopped by user")
                 break
             except Exception as e:
                 logger.error(f"Error in main loop: {e}", exc_info=True)
-                logger.info(f"Retrying in {self.check_interval} seconds...")
-                time.sleep(self.check_interval)
+                time.sleep(5) # Back off on error

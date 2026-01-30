@@ -27,7 +27,9 @@ class Config:
     feed_urls: List[str] = field(default_factory=list)
     toot_visibility: str = "public"
     check_interval: int = 300
+    notification_check_interval: int = 60
     state_file: Path = field(default_factory=lambda: Path("/state/processed_entries.txt"))
+    messages_file: Path = field(default_factory=lambda: Path("sarcastic_messages.txt"))
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -90,7 +92,9 @@ class Config:
             feed_urls=unique_feed_urls,
             toot_visibility=os.environ.get("TOOT_VISIBILITY", "public"),
             check_interval=int(os.environ.get("CHECK_INTERVAL", "300")),
+            notification_check_interval=int(os.environ.get("NOTIFICATION_CHECK_INTERVAL", "60")),
             state_file=Path(os.environ.get("PROCESSED_ENTRIES_FILE", "/state/processed_entries.txt")),
+            messages_file=Path(os.environ.get("SARCASTIC_MESSAGES_FILE", "sarcastic_messages.txt")),
         )
 
 
@@ -114,7 +118,9 @@ def main():
         logger.info(f"    - {url}")
     logger.info(f"  Visibility: {config.toot_visibility}")
     logger.info(f"  Check interval: {config.check_interval} seconds")
+    logger.info(f"  Notification check interval: {config.notification_check_interval} seconds")
     logger.info(f"  State file: {config.state_file}")
+    logger.info(f"  Messages file: {config.messages_file}")
 
     bot = MastodonRSSBot(
         client_id=config.client_id,
@@ -124,7 +130,9 @@ def main():
         feed_urls=config.feed_urls,
         toot_visibility=config.toot_visibility,
         check_interval=config.check_interval,
+        notification_check_interval=config.notification_check_interval,
         state_file=config.state_file,
+        messages_file=config.messages_file,
     )
 
     # Start the bot

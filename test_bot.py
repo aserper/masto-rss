@@ -21,13 +21,21 @@ class TestMastodonRSSBot(unittest.TestCase):
             "feed_urls": ["https://example.com/feed.xml"],
             "toot_visibility": "public",
             "check_interval": 60,
+            "notification_check_interval": 30,
             "state_file": tempfile.mktemp(),
+            "messages_file": tempfile.mktemp(),
         }
+
+        # Create dummy messages file
+        with open(self.test_config["messages_file"], "w") as f:
+            f.write("I am a bot.\n")
 
     def tearDown(self):
         """Clean up test files"""
         if os.path.exists(self.test_config["state_file"]):
             os.remove(self.test_config["state_file"])
+        if os.path.exists(self.test_config["messages_file"]):
+            os.remove(self.test_config["messages_file"])
 
     @patch("bot.Mastodon")
     def test_bot_initialization(self, mock_mastodon):
@@ -37,7 +45,9 @@ class TestMastodonRSSBot(unittest.TestCase):
         self.assertEqual(bot.feed_urls, self.test_config["feed_urls"])
         self.assertEqual(bot.toot_visibility, self.test_config["toot_visibility"])
         self.assertEqual(bot.check_interval, self.test_config["check_interval"])
+        self.assertEqual(bot.notification_check_interval, self.test_config["notification_check_interval"])
         self.assertEqual(bot.state_file, Path(self.test_config["state_file"]))
+        self.assertEqual(bot.messages_file, Path(self.test_config["messages_file"]))
 
         # Verify Mastodon client was initialized correctly
         mock_mastodon.assert_called_once_with(
@@ -96,7 +106,7 @@ class TestMastodonRSSBot(unittest.TestCase):
         bot.run()
 
         self.assertEqual(bot.process_new_entries.call_count, 2)
-        mock_sleep.assert_called_with(bot.check_interval)
+        mock_sleep.assert_called_with(5)
 
     @patch("bot.feedparser.parse")
     @patch("bot.Mastodon")
@@ -254,7 +264,9 @@ class TestMainEntry(unittest.TestCase):
             feed_urls=["https://example.com/feed.xml"],
             toot_visibility="unlisted",
             check_interval=120,
+            notification_check_interval=60,
             state_file=Path("/tmp/test_state.txt"),
+            messages_file=Path("sarcastic_messages.txt"),
         )
 
     @patch.dict(
