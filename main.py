@@ -28,6 +28,7 @@ class Config:
     toot_visibility: str = "public"
     check_interval: int = 300
     notification_check_interval: int = 60
+    enable_replies: bool = False
     state_file: Path = field(default_factory=lambda: Path("/state/processed_entries.txt"))
     messages_file: Path = field(default_factory=lambda: Path("sarcastic_messages.txt"))
 
@@ -93,6 +94,7 @@ class Config:
             toot_visibility=os.environ.get("TOOT_VISIBILITY", "public"),
             check_interval=int(os.environ.get("CHECK_INTERVAL", "300")),
             notification_check_interval=int(os.environ.get("NOTIFICATION_CHECK_INTERVAL", "60")),
+            enable_replies=os.environ.get("ENABLE_REPLIES", "").lower() in ("true", "1", "yes", "on"),
             state_file=Path(os.environ.get("PROCESSED_ENTRIES_FILE", "/state/processed_entries.txt")),
             messages_file=Path(os.environ.get("SARCASTIC_MESSAGES_FILE", "sarcastic_messages.txt")),
         )
@@ -119,6 +121,7 @@ def main():
     logger.info(f"  Visibility: {config.toot_visibility}")
     logger.info(f"  Check interval: {config.check_interval} seconds")
     logger.info(f"  Notification check interval: {config.notification_check_interval} seconds")
+    logger.info(f"  Replies enabled: {config.enable_replies}")
     logger.info(f"  State file: {config.state_file}")
     logger.info(f"  Messages file: {config.messages_file}")
 
@@ -131,6 +134,7 @@ def main():
         toot_visibility=config.toot_visibility,
         check_interval=config.check_interval,
         notification_check_interval=config.notification_check_interval,
+        enable_replies=config.enable_replies,
         state_file=config.state_file,
         messages_file=config.messages_file,
     )

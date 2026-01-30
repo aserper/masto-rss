@@ -125,6 +125,7 @@ All configuration is done via environment variables:
 | `FEEDS_FILE` | Path to file containing list of feed URLs | No* | `/config/feeds.txt` |
 | `TOOT_VISIBILITY` | Post visibility level | Yes | `public`, `unlisted`, `private`, or `direct` |
 | `CHECK_INTERVAL` | Seconds between feed checks | Yes | `300` (5 minutes) |
+| `ENABLE_REPLIES` | Enable sarcastic replies to mentions | No | `true` or `false` (default: false) |
 | `PROCESSED_ENTRIES_FILE`| Custom path for state file | No | `/state/processed.txt` |
 
 \* At least one of `RSS_FEED_URL`, `RSS_FEEDS`, or `FEEDS_FILE` must be provided.

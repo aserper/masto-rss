@@ -22,6 +22,7 @@ class TestMastodonRSSBot(unittest.TestCase):
             "toot_visibility": "public",
             "check_interval": 60,
             "notification_check_interval": 30,
+            "enable_replies": False,
             "state_file": tempfile.mktemp(),
             "messages_file": tempfile.mktemp(),
         }
@@ -46,6 +47,7 @@ class TestMastodonRSSBot(unittest.TestCase):
         self.assertEqual(bot.toot_visibility, self.test_config["toot_visibility"])
         self.assertEqual(bot.check_interval, self.test_config["check_interval"])
         self.assertEqual(bot.notification_check_interval, self.test_config["notification_check_interval"])
+        self.assertEqual(bot.enable_replies, self.test_config["enable_replies"])
         self.assertEqual(bot.state_file, Path(self.test_config["state_file"]))
         self.assertEqual(bot.messages_file, Path(self.test_config["messages_file"]))
 
@@ -267,6 +269,27 @@ class TestMastodonRSSBot(unittest.TestCase):
         self.assertEqual(kwargs["in_reply_to_id"], 999)
         self.assertEqual(kwargs["visibility"], "public")
 
+    @patch("bot.time.sleep")
+    @patch("bot.Mastodon")
+    def test_run_loop_respects_reply_flag(self, mock_mastodon, mock_sleep):
+        """Test run loop only checks notifications when enabled"""
+        bot = MastodonRSSBot(**self.test_config)
+        # We need to break the loop at the end of an iteration, so mock sleep
+        mock_sleep.side_effect = KeyboardInterrupt
+
+        bot.process_new_entries = Mock(return_value=0)
+        bot.check_notifications = Mock()
+
+        # Disabled by default
+        bot.run()
+        bot.check_notifications.assert_not_called()
+
+        # Enable it
+        bot.enable_replies = True
+        mock_sleep.side_effect = KeyboardInterrupt  # Reset side effect
+        bot.run()
+        bot.check_notifications.assert_called()
+
 
 class TestMainEntry(unittest.TestCase):
     """Test cases for main.py entry point"""
@@ -304,6 +327,7 @@ class TestMainEntry(unittest.TestCase):
             "MASTODON_ACCESS_TOKEN": "token",
             "MASTODON_INSTANCE_URL": "url",
             "FEEDS_FILE": "nonexistent.txt",
+            "ENABLE_REPLIES": "invalid_boolean",  # Should default to False
         },
     )
     def test_config_feed_file_error(self):
@@ -326,6 +350,7 @@ class TestMainEntry(unittest.TestCase):
             "RSS_FEED_URL": "https://example.com/feed.xml",
             "TOOT_VISIBILITY": "unlisted",
             "CHECK_INTERVAL": "120",
+            "ENABLE_REPLIES": "true",
             "PROCESSED_ENTRIES_FILE": "/tmp/test_state.txt",
         },
     )
@@ -353,6 +378,7 @@ class TestMainEntry(unittest.TestCase):
             toot_visibility="unlisted",
             check_interval=120,
             notification_check_interval=60,
+            enable_replies=True,
             state_file=Path("/tmp/test_state.txt"),
             messages_file=Path("sarcastic_messages.txt"),
         )

@@ -26,6 +26,7 @@ class MastodonRSSBot:
         toot_visibility: str = "public",
         check_interval: int = 300,
         notification_check_interval: int = 60,
+        enable_replies: bool = False,
         state_file: Path = Path("/state/processed_entries.txt"),
         messages_file: Path = Path("sarcastic_messages.txt"),
     ):
@@ -40,14 +41,18 @@ class MastodonRSSBot:
             feed_urls: List of URLs of the RSS/Atom feeds to monitor
             toot_visibility: Visibility level for posts ('public', 'unlisted', 'private', 'direct')
             check_interval: Seconds between feed checks
+            check_interval: Seconds between feed checks
             notification_check_interval: Seconds between notification checks
+            enable_replies: Whether to enable sarcastic replies to mentions
             state_file: Path to file storing processed entry URLs
             messages_file: Path to file storing sarcastic messages
         """
         self.feed_urls = feed_urls
         self.toot_visibility = toot_visibility
         self.check_interval = check_interval
+        self.check_interval = check_interval
         self.notification_check_interval = notification_check_interval
+        self.enable_replies = enable_replies
         self.state_file = Path(state_file)
         self.messages_file = Path(messages_file)
 
@@ -299,8 +304,8 @@ class MastodonRSSBot:
                         logger.info(f"Posted {count} new entries")
                     next_feed_check = current_time + self.check_interval
 
-                # Check notifications
-                if current_time >= next_notification_check:
+                # Check notifications (only if enabled)
+                if self.enable_replies and current_time >= next_notification_check:
                     self.check_notifications()
                     next_notification_check = current_time + self.notification_check_interval
 
