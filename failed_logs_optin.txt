@@ -1,0 +1,71 @@
+Integration Tests (3.12)	Run integration tests	﻿2026-01-30T03:38:57.7788327Z ##[group]Run uv run pytest test_integration.py --cov=bot --cov-report=xml --cov-report=term --cov-fail-under=70
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7789141Z [36;1muv run pytest test_integration.py --cov=bot --cov-report=xml --cov-report=term --cov-fail-under=70[0m
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7822888Z shell: /usr/bin/bash -e {0}
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7823149Z env:
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7823412Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.12/x64
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7823830Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.12/x64/lib/pkgconfig
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7824274Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.12/x64
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7824644Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.12/x64
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7825005Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.12/x64
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7825369Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.12/x64/lib
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7825727Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:57.7826011Z ##[endgroup]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:59.2977344Z ============================= test session starts ==============================
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:59.2978333Z platform linux -- Python 3.12.12, pytest-9.0.2, pluggy-1.6.0 -- /home/runner/work/masto-rss/masto-rss/.venv/bin/python
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:59.2979092Z cachedir: .pytest_cache
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:59.2979454Z rootdir: /home/runner/work/masto-rss/masto-rss
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:59.2979872Z configfile: pytest.ini
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:38:59.2980195Z plugins: cov-7.0.0, mock-3.15.1
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9037142Z collecting ... collected 9 items
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9037535Z 
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9117104Z test_integration.py::TestRSSFeedIntegration::test_atom_feed_parsing PASSED [ 11%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9146705Z test_integration.py::TestRSSFeedIntegration::test_end_to_end_rss_to_mastodon PASSED [ 22%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9180767Z test_integration.py::TestRSSFeedIntegration::test_incremental_feed_updates PASSED [ 33%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9205303Z test_integration.py::TestRSSFeedIntegration::test_malformed_xml_handling PASSED [ 44%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9228984Z test_integration.py::TestRSSFeedIntegration::test_network_error_handling PASSED [ 55%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9252979Z test_integration.py::TestRSSFeedIntegration::test_notification_flow PASSED [ 66%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9287649Z test_integration.py::TestRSSFeedIntegration::test_persistence_across_runs PASSED [ 77%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9321899Z test_integration.py::TestMastodonAPIIntegration::test_different_visibility_levels PASSED [ 88%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9367146Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.12/site-packages/coverage/inorout.py:521: CoverageWarning: Module main was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-imported
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9369198Z   self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9370643Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.12/site-packages/coverage/inorout.py:537: CoverageWarning: Module bot was previously imported, but not measured (module-not-measured); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-measured
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:00.9372017Z   self.warn(msg, slug="module-not-measured")
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0323750Z test_integration.py::TestMastodonAPIIntegration::test_retry_on_rate_limit PASSED [100%]
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0324635Z ERROR: Coverage failure: total of 67 is less than fail-under=70
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0325022Z 
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0325064Z 
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0325266Z ================================ tests coverage ================================
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0325896Z _______________ coverage: platform linux, python 3.12.12-final-0 _______________
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0326325Z 
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0326472Z Name     Stmts   Miss  Cover   Missing
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0326951Z --------------------------------------
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0327684Z bot.py     150     50    67%   79-80, 86-88, 102-104, 117-118, 135-137, 194-195, 208, 242-247, 258-262, 270, 274, 283-284, 291-320
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0328792Z --------------------------------------
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0329149Z TOTAL      150     50    67%
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0329487Z Coverage HTML written to dir htmlcov
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0329882Z Coverage XML written to file coverage.xml
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0330413Z FAIL Required test coverage of 70% not reached. Total coverage: 66.67%
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0331008Z ============================== 9 passed in 1.69s ===============================
+Integration Tests (3.12)	Run integration tests	2026-01-30T03:39:01.0947580Z ##[error]Process completed with exit code 1.
+All Tests Passed	Check test results	﻿2026-01-30T03:39:19.9689843Z ##[group]Run if [ "success" != "success" ]; then
+All Tests Passed	Check test results	2026-01-30T03:39:19.9690690Z [36;1mif [ "success" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9691240Z [36;1m  echo "Unit tests failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9691756Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9692326Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9692779Z [36;1mif [ "failure" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9693427Z [36;1m  echo "Integration tests failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9693975Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9694632Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9695119Z [36;1mif [ "success" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9695687Z [36;1m  echo "Code quality checks failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9696251Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9696633Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9697111Z [36;1mif [ "success" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9697649Z [36;1m  echo "Docker build test failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9698178Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9698602Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:39:19.9699147Z [36;1mecho "All tests passed successfully!"[0m
+All Tests Passed	Check test results	2026-01-30T03:39:20.0006984Z shell: /usr/bin/bash -e {0}
+All Tests Passed	Check test results	2026-01-30T03:39:20.0007843Z ##[endgroup]
+All Tests Passed	Check test results	2026-01-30T03:39:20.0258922Z Integration tests failed
+All Tests Passed	Check test results	2026-01-30T03:39:20.0282674Z ##[error]Process completed with exit code 1.
