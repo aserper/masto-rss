@@ -1,0 +1,279 @@
+Code Quality	Run ruff check	﻿2026-01-30T03:29:22.8358362Z ##[group]Run uv run ruff check .
+Code Quality	Run ruff check	2026-01-30T03:29:22.8358667Z [36;1muv run ruff check .[0m
+Code Quality	Run ruff check	2026-01-30T03:29:22.8392443Z shell: /usr/bin/bash -e {0}
+Code Quality	Run ruff check	2026-01-30T03:29:22.8392671Z env:
+Code Quality	Run ruff check	2026-01-30T03:29:22.8392920Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+Code Quality	Run ruff check	2026-01-30T03:29:22.8393333Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+Code Quality	Run ruff check	2026-01-30T03:29:22.8393724Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Code Quality	Run ruff check	2026-01-30T03:29:22.8394094Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Code Quality	Run ruff check	2026-01-30T03:29:22.8394488Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Code Quality	Run ruff check	2026-01-30T03:29:22.8394851Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+Code Quality	Run ruff check	2026-01-30T03:29:22.8395196Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Code Quality	Run ruff check	2026-01-30T03:29:22.8395471Z ##[endgroup]
+Code Quality	Run ruff check	2026-01-30T03:29:22.9037853Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9038450Z    --> test_bot.py:189:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9038682Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9038947Z 187 |         mock_instance = Mock()
+Code Quality	Run ruff check	2026-01-30T03:29:22.9039245Z 188 |         mock_mastodon.return_value = mock_instance
+Code Quality	Run ruff check	2026-01-30T03:29:22.9039521Z 189 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9039693Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9039886Z 190 |         # Mock notifications response
+Code Quality	Run ruff check	2026-01-30T03:29:22.9040201Z 191 |         mock_instance.notifications.return_value = [
+Code Quality	Run ruff check	2026-01-30T03:29:22.9040476Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9040871Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9041068Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9041165Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9041449Z    --> test_bot.py:194:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9041650Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9041942Z 192 |             {'id': 101, 'type': 'mention', 'status': {'id': 555, 'account': {'acct': 'user'}}}
+Code Quality	Run ruff check	2026-01-30T03:29:22.9042300Z 193 |         ]
+Code Quality	Run ruff check	2026-01-30T03:29:22.9042467Z 194 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9042625Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9042827Z 195 |         bot = MastodonRSSBot(**self.test_config)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9043095Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9043271Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9043443Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9043538Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9043774Z    --> test_bot.py:196:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9043975Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9044175Z 195 |         bot = MastodonRSSBot(**self.test_config)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9044451Z 196 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9044703Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9044880Z 197 |         # Set initial ID
+Code Quality	Run ruff check	2026-01-30T03:29:22.9045118Z 198 |         bot.last_notification_id = 100
+Code Quality	Run ruff check	2026-01-30T03:29:22.9045597Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9045779Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9045958Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9046052Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9046291Z    --> test_bot.py:199:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9046488Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9046646Z 197 |         # Set initial ID
+Code Quality	Run ruff check	2026-01-30T03:29:22.9046878Z 198 |         bot.last_notification_id = 100
+Code Quality	Run ruff check	2026-01-30T03:29:22.9047121Z 199 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9047283Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9047560Z 200 |         # Run check
+Code Quality	Run ruff check	2026-01-30T03:29:22.9047906Z 201 |         bot.check_notifications()
+Code Quality	Run ruff check	2026-01-30T03:29:22.9048308Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9048595Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9048877Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9049017Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9049413Z    --> test_bot.py:202:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9049720Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9049958Z 200 |         # Run check
+Code Quality	Run ruff check	2026-01-30T03:29:22.9050283Z 201 |         bot.check_notifications()
+Code Quality	Run ruff check	2026-01-30T03:29:22.9050797Z 202 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9051060Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9051307Z 203 |         # Verify
+Code Quality	Run ruff check	2026-01-30T03:29:22.9051896Z 204 |         mock_instance.notifications.assert_called_with(types=['mention'], since_id=100)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9052585Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9052876Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9053439Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9053585Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9054016Z    --> test_bot.py:214:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9054340Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9054686Z 212 |         mock_mastodon.return_value = mock_instance
+Code Quality	Run ruff check	2026-01-30T03:29:22.9055305Z 213 |         mock_instance.notifications.return_value = [{'id': 50}]
+Code Quality	Run ruff check	2026-01-30T03:29:22.9055842Z 214 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9056120Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9056475Z 215 |         bot = MastodonRSSBot(**self.test_config)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9056999Z 216 |         # last_notification_id is None by default
+Code Quality	Run ruff check	2026-01-30T03:29:22.9057445Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9057747Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9058045Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9058201Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9058613Z    --> test_bot.py:217:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9058937Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9059271Z 215 |         bot = MastodonRSSBot(**self.test_config)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9059786Z 216 |         # last_notification_id is None by default
+Code Quality	Run ruff check	2026-01-30T03:29:22.9060239Z 217 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9060510Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9060968Z 218 |         bot.check_notifications()
+Code Quality	Run ruff check	2026-01-30T03:29:22.9061368Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9061668Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9061963Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9062116Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9062523Z    --> test_bot.py:219:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9062844Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9063128Z 218 |         bot.check_notifications()
+Code Quality	Run ruff check	2026-01-30T03:29:22.9063500Z 219 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9063756Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9064076Z 220 |         # Should populate ID but NOT reply
+Code Quality	Run ruff check	2026-01-30T03:29:22.9064611Z 221 |         self.assertEqual(bot.last_notification_id, 50)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9065104Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9065401Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9065688Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9065830Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9066240Z    --> test_bot.py:229:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9066558Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9066835Z 227 |         mock_instance = Mock()
+Code Quality	Run ruff check	2026-01-30T03:29:22.9067298Z 228 |         mock_mastodon.return_value = mock_instance
+Code Quality	Run ruff check	2026-01-30T03:29:22.9067757Z 229 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9068027Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9068365Z 230 |         bot = MastodonRSSBot(**self.test_config)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9068797Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9069077Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9069373Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9069748Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9070008Z    --> test_bot.py:231:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9070210Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9070412Z 230 |         bot = MastodonRSSBot(**self.test_config)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9070934Z 231 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9071107Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9071281Z 232 |         notification = {
+Code Quality	Run ruff check	2026-01-30T03:29:22.9071493Z 233 |             'id': 101,
+Code Quality	Run ruff check	2026-01-30T03:29:22.9071708Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9071895Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9072094Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9072246Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9072866Z    --> test_bot.py:239:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9073196Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9073433Z 237 |             }
+Code Quality	Run ruff check	2026-01-30T03:29:22.9073713Z 238 |         }
+Code Quality	Run ruff check	2026-01-30T03:29:22.9073991Z 239 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9074258Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9074462Z 240 |         bot.reply_to_mention(notification)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9074721Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9074909Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9075087Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9075175Z W293 [*] Blank line contains whitespace
+Code Quality	Run ruff check	2026-01-30T03:29:22.9075418Z    --> test_bot.py:241:1
+Code Quality	Run ruff check	2026-01-30T03:29:22.9075616Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9075796Z 240 |         bot.reply_to_mention(notification)
+Code Quality	Run ruff check	2026-01-30T03:29:22.9076043Z 241 |         
+Code Quality	Run ruff check	2026-01-30T03:29:22.9076202Z     | ^^^^^^^^
+Code Quality	Run ruff check	2026-01-30T03:29:22.9076366Z 242 |         # Verify reply
+Code Quality	Run ruff check	2026-01-30T03:29:22.9076802Z 243 |         mock_instance.status_post.assert_called_once()
+Code Quality	Run ruff check	2026-01-30T03:29:22.9077086Z     |
+Code Quality	Run ruff check	2026-01-30T03:29:22.9077262Z help: Remove whitespace from blank line
+Code Quality	Run ruff check	2026-01-30T03:29:22.9077429Z 
+Code Quality	Run ruff check	2026-01-30T03:29:22.9077497Z Found 12 errors.
+Code Quality	Run ruff check	2026-01-30T03:29:22.9077698Z [*] 12 fixable with the `--fix` option.
+Code Quality	Run ruff check	2026-01-30T03:29:22.9088495Z ##[error]Process completed with exit code 1.
+Unit Tests (3.11)	Run unit tests	﻿2026-01-30T03:29:22.8869768Z ##[group]Run uv run pytest test_bot.py -m "not integration" --cov=bot --cov=main --cov-report=xml --cov-report=term
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8870596Z [36;1muv run pytest test_bot.py -m "not integration" --cov=bot --cov=main --cov-report=xml --cov-report=term[0m
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8902466Z shell: /usr/bin/bash -e {0}
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8902700Z env:
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8903079Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8903538Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8903984Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8904361Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8904736Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8905103Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8905461Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:22.8905742Z ##[endgroup]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.1487490Z ============================= test session starts ==============================
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.1489213Z platform linux -- Python 3.11.14, pytest-9.0.2, pluggy-1.6.0 -- /home/runner/work/masto-rss/masto-rss/.venv/bin/python
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.1490383Z cachedir: .pytest_cache
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.1490931Z rootdir: /home/runner/work/masto-rss/masto-rss
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.1491572Z configfile: pytest.ini
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.1492000Z plugins: cov-7.0.0, mock-3.15.1
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9479613Z collecting ... collected 17 items
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9479969Z 
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9522216Z test_bot.py::TestMastodonRSSBot::test_bot_initialization PASSED          [  5%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9553406Z test_bot.py::TestMastodonRSSBot::test_check_notifications PASSED         [ 11%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9578236Z test_bot.py::TestMastodonRSSBot::test_check_notifications_init PASSED    [ 17%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9609634Z test_bot.py::TestMastodonRSSBot::test_parse_feed_bozo PASSED             [ 23%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9639832Z test_bot.py::TestMastodonRSSBot::test_process_feed_existing_entry PASSED [ 29%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9670966Z test_bot.py::TestMastodonRSSBot::test_process_feed_new_entry PASSED      [ 35%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9703789Z test_bot.py::TestMastodonRSSBot::test_process_feed_post_failure PASSED   [ 41%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9738276Z test_bot.py::TestMastodonRSSBot::test_process_new_entries_delegation PASSED [ 47%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9763070Z test_bot.py::TestMastodonRSSBot::test_reply_to_mention PASSED            [ 52%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9805800Z test_bot.py::TestMastodonRSSBot::test_run_exception_retry PASSED         [ 58%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9834106Z test_bot.py::TestMastodonRSSBot::test_run_keyboard_interrupt PASSED      [ 64%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9860801Z test_bot.py::TestMastodonRSSBot::test_save_processed_entries_error PASSED [ 70%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9913261Z test_bot.py::TestMainEntry::test_config_feed_file_error PASSED           [ 76%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9938799Z test_bot.py::TestMainEntry::test_config_missing_vars PASSED              [ 82%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:24.9964379Z test_bot.py::TestMainEntry::test_config_no_feeds PASSED                  [ 88%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.0002837Z test_bot.py::TestMainEntry::test_main_loads_legacy_environment_config PASSED [ 94%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.0064578Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.11/site-packages/coverage/inorout.py:537: CoverageWarning: Module bot was previously imported, but not measured (module-not-measured); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-measured
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.0066717Z   self.warn(msg, slug="module-not-measured")
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.0069048Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.11/site-packages/coverage/inorout.py:537: CoverageWarning: Module main was previously imported, but not measured (module-not-measured); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-measured
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.0071054Z   self.warn(msg, slug="module-not-measured")
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1621344Z test_bot.py::TestMainEntry::test_main_loads_multiple_feeds_env PASSED    [100%]
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1622764Z ERROR: Coverage failure: total of 78 is less than fail-under=80
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1623427Z 
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1623438Z 
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1623766Z ================================ tests coverage ================================
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1624831Z _______________ coverage: platform linux, python 3.11.14-final-0 _______________
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1625497Z 
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1625657Z Name      Stmts   Miss  Cover   Missing
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1626058Z ---------------------------------------
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1626774Z bot.py      148     35    76%   74-75, 81-83, 92-99, 130-132, 179-180, 189-190, 241, 256-260, 268, 272, 285-286, 305-315
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1627505Z main.py      75     13    83%   72-77, 107-112, 143
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1628322Z ---------------------------------------
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1628707Z TOTAL       223     48    78%
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1629087Z Coverage HTML written to dir htmlcov
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1629511Z Coverage XML written to file coverage.xml
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1630084Z FAIL Required test coverage of 80% not reached. Total coverage: 78.48%
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.1630739Z ============================== 17 passed in 0.97s ==============================
+Unit Tests (3.11)	Run unit tests	2026-01-30T03:29:25.2201114Z ##[error]Process completed with exit code 1.
+Integration Tests (3.11)	Run integration tests	﻿2026-01-30T03:29:21.2514385Z ##[group]Run uv run pytest test_integration.py --cov=bot --cov-report=xml --cov-report=term --cov-fail-under=70
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2515214Z [36;1muv run pytest test_integration.py --cov=bot --cov-report=xml --cov-report=term --cov-fail-under=70[0m
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2548098Z shell: /usr/bin/bash -e {0}
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2548338Z env:
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2548590Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2549010Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2549428Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2549789Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2550150Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2550516Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2550868Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:21.2551144Z ##[endgroup]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.0248256Z ============================= test session starts ==============================
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.0249409Z platform linux -- Python 3.11.14, pytest-9.0.2, pluggy-1.6.0 -- /home/runner/work/masto-rss/masto-rss/.venv/bin/python
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.0250309Z cachedir: .pytest_cache
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.0250766Z rootdir: /home/runner/work/masto-rss/masto-rss
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.0251281Z configfile: pytest.ini
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.0251664Z plugins: cov-7.0.0, mock-3.15.1
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5449645Z collecting ... collected 8 items
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5450023Z 
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5505603Z test_integration.py::TestRSSFeedIntegration::test_atom_feed_parsing PASSED [ 12%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5543016Z test_integration.py::TestRSSFeedIntegration::test_end_to_end_rss_to_mastodon PASSED [ 25%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5584639Z test_integration.py::TestRSSFeedIntegration::test_incremental_feed_updates PASSED [ 37%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5613924Z test_integration.py::TestRSSFeedIntegration::test_malformed_xml_handling PASSED [ 50%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5643722Z test_integration.py::TestRSSFeedIntegration::test_network_error_handling PASSED [ 62%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5685984Z test_integration.py::TestRSSFeedIntegration::test_persistence_across_runs PASSED [ 75%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5727257Z test_integration.py::TestMastodonAPIIntegration::test_different_visibility_levels PASSED [ 87%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5775265Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.11/site-packages/coverage/inorout.py:521: CoverageWarning: Module main was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-imported
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5777015Z   self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5778385Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.11/site-packages/coverage/inorout.py:537: CoverageWarning: Module bot was previously imported, but not measured (module-not-measured); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-measured
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.5779663Z   self.warn(msg, slug="module-not-measured")
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6615100Z test_integration.py::TestMastodonAPIIntegration::test_retry_on_rate_limit PASSED [100%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6616047Z ERROR: Coverage failure: total of 55 is less than fail-under=70
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6616446Z 
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6616456Z 
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6616661Z ================================ tests coverage ================================
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6617390Z _______________ coverage: platform linux, python 3.11.14-final-0 _______________
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6617847Z 
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6617998Z Name     Stmts   Miss  Cover   Missing
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6618389Z --------------------------------------
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6619009Z bot.py     148     67    55%   74-75, 81-83, 97-99, 112-113, 130-132, 189-190, 203, 234-260, 266-286, 293-322
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6619704Z --------------------------------------
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6620550Z TOTAL      148     67    55%
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6620928Z Coverage HTML written to dir htmlcov
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6621380Z Coverage XML written to file coverage.xml
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6621968Z FAIL Required test coverage of 70% not reached. Total coverage: 54.73%
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.6622621Z ============================== 8 passed in 0.60s ===============================
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:29:22.7118185Z ##[error]Process completed with exit code 1.
+All Tests Passed	Check test results	﻿2026-01-30T03:29:49.1089851Z ##[group]Run if [ "failure" != "success" ]; then
+All Tests Passed	Check test results	2026-01-30T03:29:49.1090718Z [36;1mif [ "failure" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1091885Z [36;1m  echo "Unit tests failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1092469Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1093060Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1093666Z [36;1mif [ "failure" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1094350Z [36;1m  echo "Integration tests failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1094905Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1095443Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1095924Z [36;1mif [ "failure" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1096492Z [36;1m  echo "Code quality checks failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1097163Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1097668Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1098132Z [36;1mif [ "success" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1098775Z [36;1m  echo "Docker build test failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1099351Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1099786Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1100417Z [36;1mecho "All tests passed successfully!"[0m
+All Tests Passed	Check test results	2026-01-30T03:29:49.1534926Z shell: /usr/bin/bash -e {0}
+All Tests Passed	Check test results	2026-01-30T03:29:49.1535969Z ##[endgroup]
+All Tests Passed	Check test results	2026-01-30T03:29:49.1736187Z Unit tests failed
+All Tests Passed	Check test results	2026-01-30T03:29:49.1764200Z ##[error]Process completed with exit code 1.

@@ -234,25 +234,22 @@ class MastodonRSSBot:
         try:
             # First run, just get the latest ID so we don't reply to old stuff if we restart
             if self.last_notification_id is None:
-                notes = self.mastodon.notifications(types=['mention'], limit=1)
+                notes = self.mastodon.notifications(types=["mention"], limit=1)
                 if notes:
-                    self.last_notification_id = notes[0]['id']
+                    self.last_notification_id = notes[0]["id"]
                 else:
-                    self.last_notification_id = 0 # Start from beginning if no notes
+                    self.last_notification_id = 0  # Start from beginning if no notes
                 return
 
-            notifications = self.mastodon.notifications(
-                types=['mention'],
-                since_id=self.last_notification_id
-            )
+            notifications = self.mastodon.notifications(types=["mention"], since_id=self.last_notification_id)
 
             for note in notifications:
-                self.last_notification_id = max(self.last_notification_id, note['id'])
+                self.last_notification_id = max(self.last_notification_id, note["id"])
                 self.reply_to_mention(note)
 
                 # Dismiss notification so we don't see it again in UI (optional, but clean)
                 try:
-                    self.mastodon.notifications_dismiss(note['id'])
+                    self.mastodon.notifications_dismiss(note["id"])
                 except Exception:
                     pass
 
@@ -263,25 +260,21 @@ class MastodonRSSBot:
         """
         Reply to a mention with a random sarcastic message.
         """
-        status = notification.get('status')
+        status = notification.get("status")
         if not status:
             return
 
-        account = status.get('account')
+        account = status.get("account")
         if not account:
             return
 
-        username = account.get('acct')
+        username = account.get("acct")
         mention_text = f"@{username} {random.choice(self.sarcastic_messages)}"
 
         logger.info(f"Responding to {username} with sarcasm.")
 
         try:
-            self.mastodon.status_post(
-                mention_text,
-                in_reply_to_id=status['id'],
-                visibility=self.toot_visibility
-            )
+            self.mastodon.status_post(mention_text, in_reply_to_id=status["id"], visibility=self.toot_visibility)
         except Exception as e:
             logger.error(f"Failed to reply to {username}: {e}")
 
@@ -319,4 +312,4 @@ class MastodonRSSBot:
                 break
             except Exception as e:
                 logger.error(f"Error in main loop: {e}", exc_info=True)
-                time.sleep(5) # Back off on error
+                time.sleep(5)  # Back off on error

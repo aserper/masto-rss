@@ -1,0 +1,140 @@
+Code Quality	Run ruff format	﻿2026-01-30T03:23:56.5123612Z ##[group]Run uv run ruff format --check .
+Code Quality	Run ruff format	2026-01-30T03:23:56.5123963Z [36;1muv run ruff format --check .[0m
+Code Quality	Run ruff format	2026-01-30T03:23:56.5156787Z shell: /usr/bin/bash -e {0}
+Code Quality	Run ruff format	2026-01-30T03:23:56.5157040Z env:
+Code Quality	Run ruff format	2026-01-30T03:23:56.5157299Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+Code Quality	Run ruff format	2026-01-30T03:23:56.5157754Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+Code Quality	Run ruff format	2026-01-30T03:23:56.5158184Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Code Quality	Run ruff format	2026-01-30T03:23:56.5158556Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Code Quality	Run ruff format	2026-01-30T03:23:56.5158910Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Code Quality	Run ruff format	2026-01-30T03:23:56.5159278Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+Code Quality	Run ruff format	2026-01-30T03:23:56.5159661Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Code Quality	Run ruff format	2026-01-30T03:23:56.5159937Z ##[endgroup]
+Code Quality	Run ruff format	2026-01-30T03:23:56.5395974Z Would reformat: bot.py
+Code Quality	Run ruff format	2026-01-30T03:23:56.5396541Z 1 file would be reformatted, 4 files already formatted
+Code Quality	Run ruff format	2026-01-30T03:23:56.5436544Z ##[error]Process completed with exit code 1.
+Unit Tests (3.10)	Run unit tests	﻿2026-01-30T03:23:56.0937970Z ##[group]Run uv run pytest test_bot.py -m "not integration" --cov=bot --cov=main --cov-report=xml --cov-report=term
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0938865Z [36;1muv run pytest test_bot.py -m "not integration" --cov=bot --cov=main --cov-report=xml --cov-report=term[0m
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0972056Z shell: /usr/bin/bash -e {0}
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0972304Z env:
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0972560Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.19/x64
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0972997Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib/pkgconfig
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0973419Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0973785Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0974146Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.19/x64
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0974520Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.19/x64/lib
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0974908Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:56.0975203Z ##[endgroup]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.1489716Z ============================= test session starts ==============================
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.1490558Z platform linux -- Python 3.10.19, pytest-9.0.2, pluggy-1.6.0 -- /home/runner/work/masto-rss/masto-rss/.venv/bin/python
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.1491211Z cachedir: .pytest_cache
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.1491529Z rootdir: /home/runner/work/masto-rss/masto-rss
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.1491890Z configfile: pytest.ini
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.1492195Z plugins: cov-7.0.0, mock-3.15.1
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.6975788Z collecting ... collected 14 items
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.6976169Z 
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7015001Z test_bot.py::TestMastodonRSSBot::test_bot_initialization PASSED          [  7%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7046570Z test_bot.py::TestMastodonRSSBot::test_parse_feed_bozo PASSED             [ 14%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7078568Z test_bot.py::TestMastodonRSSBot::test_process_feed_existing_entry PASSED [ 21%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7110557Z test_bot.py::TestMastodonRSSBot::test_process_feed_new_entry PASSED      [ 28%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7145937Z test_bot.py::TestMastodonRSSBot::test_process_feed_post_failure PASSED   [ 35%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7182974Z test_bot.py::TestMastodonRSSBot::test_process_new_entries_delegation PASSED [ 42%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7225642Z test_bot.py::TestMastodonRSSBot::test_run_exception_retry PASSED         [ 50%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7251148Z test_bot.py::TestMastodonRSSBot::test_run_keyboard_interrupt PASSED      [ 57%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7280573Z test_bot.py::TestMastodonRSSBot::test_save_processed_entries_error PASSED [ 64%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7332901Z test_bot.py::TestMainEntry::test_config_feed_file_error PASSED           [ 71%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7359957Z test_bot.py::TestMainEntry::test_config_missing_vars PASSED              [ 78%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7386825Z test_bot.py::TestMainEntry::test_config_no_feeds PASSED                  [ 85%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7426793Z test_bot.py::TestMainEntry::test_main_loads_legacy_environment_config PASSED [ 92%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7484772Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.10/site-packages/coverage/inorout.py:537: CoverageWarning: Module bot was previously imported, but not measured (module-not-measured); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-measured
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7487128Z   self.warn(msg, slug="module-not-measured")
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7489149Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.10/site-packages/coverage/inorout.py:537: CoverageWarning: Module main was previously imported, but not measured (module-not-measured); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-measured
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.7491175Z   self.warn(msg, slug="module-not-measured")
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9138535Z test_bot.py::TestMainEntry::test_main_loads_multiple_feeds_env PASSED    [100%]
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9139503Z ERROR: Coverage failure: total of 69 is less than fail-under=80
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9139911Z 
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9139944Z 
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9140607Z ================================ tests coverage ================================
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9141284Z _______________ coverage: platform linux, python 3.10.19-final-0 _______________
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9141737Z 
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9141886Z Name      Stmts   Miss  Cover   Missing
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9142268Z ---------------------------------------
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9142875Z bot.py      148     56    62%   74-75, 81-83, 92-99, 130-132, 179-180, 189-190, 234-260, 266-286, 305-315
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9143525Z main.py      75     13    83%   72-77, 107-112, 143
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9143933Z ---------------------------------------
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9144293Z TOTAL       223     69    69%
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9144645Z Coverage HTML written to dir htmlcov
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9145056Z Coverage XML written to file coverage.xml
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9145648Z FAIL Required test coverage of 80% not reached. Total coverage: 69.06%
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9146556Z ============================== 14 passed in 0.73s ==============================
+Unit Tests (3.10)	Run unit tests	2026-01-30T03:23:57.9607053Z ##[error]Process completed with exit code 1.
+Integration Tests (3.11)	Run integration tests	﻿2026-01-30T03:23:56.8247312Z ##[group]Run uv run pytest test_integration.py --cov=bot --cov-report=xml --cov-report=term --cov-fail-under=70
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8248107Z [36;1muv run pytest test_integration.py --cov=bot --cov-report=xml --cov-report=term --cov-fail-under=70[0m
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8280962Z shell: /usr/bin/bash -e {0}
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8281199Z env:
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8281448Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8281859Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8282273Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8282625Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8282970Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8283333Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8283676Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:56.8283953Z ##[endgroup]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:57.7674173Z ============================= test session starts ==============================
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:57.7675276Z platform linux -- Python 3.11.14, pytest-9.0.2, pluggy-1.6.0 -- /home/runner/work/masto-rss/masto-rss/.venv/bin/python
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:57.7676133Z cachedir: .pytest_cache
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:57.7676540Z rootdir: /home/runner/work/masto-rss/masto-rss
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:57.7677025Z configfile: pytest.ini
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:57.7677401Z plugins: cov-7.0.0, mock-3.15.1
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3047144Z collecting ... collected 8 items
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3047598Z 
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3138736Z test_integration.py::TestRSSFeedIntegration::test_atom_feed_parsing PASSED [ 12%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3198576Z test_integration.py::TestRSSFeedIntegration::test_end_to_end_rss_to_mastodon PASSED [ 25%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3243336Z test_integration.py::TestRSSFeedIntegration::test_incremental_feed_updates PASSED [ 37%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3272587Z test_integration.py::TestRSSFeedIntegration::test_malformed_xml_handling PASSED [ 50%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3303053Z test_integration.py::TestRSSFeedIntegration::test_network_error_handling PASSED [ 62%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3344872Z test_integration.py::TestRSSFeedIntegration::test_persistence_across_runs PASSED [ 75%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3386296Z test_integration.py::TestMastodonAPIIntegration::test_different_visibility_levels PASSED [ 87%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3433693Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.11/site-packages/coverage/inorout.py:521: CoverageWarning: Module main was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-imported
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3436015Z   self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3438104Z /home/runner/work/masto-rss/masto-rss/.venv/lib/python3.11/site-packages/coverage/inorout.py:537: CoverageWarning: Module bot was previously imported, but not measured (module-not-measured); see https://coverage.readthedocs.io/en/7.13.0/messages.html#warning-module-not-measured
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.3440383Z   self.warn(msg, slug="module-not-measured")
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4391226Z test_integration.py::TestMastodonAPIIntegration::test_retry_on_rate_limit PASSED [100%]
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4392140Z ERROR: Coverage failure: total of 55 is less than fail-under=70
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4392530Z 
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4392541Z 
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4392752Z ================================ tests coverage ================================
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4393425Z _______________ coverage: platform linux, python 3.11.14-final-0 _______________
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4393870Z 
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4394024Z Name     Stmts   Miss  Cover   Missing
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4394420Z --------------------------------------
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4395048Z bot.py     148     67    55%   74-75, 81-83, 97-99, 112-113, 130-132, 189-190, 203, 234-260, 266-286, 293-322
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4395810Z --------------------------------------
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4396551Z TOTAL      148     67    55%
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4396919Z Coverage HTML written to dir htmlcov
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4397377Z Coverage XML written to file coverage.xml
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4397974Z FAIL Required test coverage of 70% not reached. Total coverage: 54.73%
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4398643Z ============================== 8 passed in 0.62s ===============================
+Integration Tests (3.11)	Run integration tests	2026-01-30T03:23:58.4831231Z ##[error]Process completed with exit code 1.
+All Tests Passed	Check test results	﻿2026-01-30T03:24:15.5932824Z ##[group]Run if [ "failure" != "success" ]; then
+All Tests Passed	Check test results	2026-01-30T03:24:15.5933788Z [36;1mif [ "failure" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5934449Z [36;1m  echo "Unit tests failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5934984Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5935682Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5936250Z [36;1mif [ "failure" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5936891Z [36;1m  echo "Integration tests failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5937511Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5937991Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5938572Z [36;1mif [ "failure" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5939622Z [36;1m  echo "Code quality checks failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5940374Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5940934Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5941443Z [36;1mif [ "success" != "success" ]; then[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5942105Z [36;1m  echo "Docker build test failed"[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5942675Z [36;1m  exit 1[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5943269Z [36;1mfi[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.5943971Z [36;1mecho "All tests passed successfully!"[0m
+All Tests Passed	Check test results	2026-01-30T03:24:15.6390306Z shell: /usr/bin/bash -e {0}
+All Tests Passed	Check test results	2026-01-30T03:24:15.6391491Z ##[endgroup]
+All Tests Passed	Check test results	2026-01-30T03:24:15.6591751Z Unit tests failed
+All Tests Passed	Check test results	2026-01-30T03:24:15.6617504Z ##[error]Process completed with exit code 1.
