@@ -174,6 +174,40 @@ class TestRSSFeedIntegration(unittest.TestCase):
         # The important thing is it doesn't crash
         self.assertIsInstance(count, int)
 
+    @patch("bot.Mastodon")
+    def test_notification_flow(self, mock_mastodon):
+        """Test the notification check and reply flow in integration context"""
+        mock_instance = Mock()
+        mock_mastodon.return_value = mock_instance
+
+        # Setup mock notifications
+        mock_instance.notifications.return_value = [
+            {"id": 101, "type": "mention", "status": {"id": 555, "account": {"acct": "integration_user"}}}
+        ]
+
+        # Create a deterministic messages file
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+            f.write("I am a bot.\n")
+            msg_path = f.name
+
+        self.test_config["messages_file"] = msg_path
+
+        try:
+            bot = MastodonRSSBot(**self.test_config)
+
+            # Trigger notification check
+            bot.last_notification_id = 100
+            bot.check_notifications()
+
+            # Verify reply posted
+            mock_instance.status_post.assert_called_once()
+            args, kwargs = mock_instance.status_post.call_args
+            self.assertIn("@integration_user", args[0])
+            self.assertIn("bot", args[0].lower())
+        finally:
+            if os.path.exists(msg_path):
+                os.remove(msg_path)
+
 
 class TestMastodonAPIIntegration(unittest.TestCase):
     """Integration tests for Mastodon API interaction"""

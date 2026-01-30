@@ -182,26 +182,53 @@ class TestMastodonRSSBot(unittest.TestCase):
             mock_save.assert_called_once()
 
     @patch("bot.Mastodon")
+    def test_load_sarcastic_messages_missing(self, mock_mastodon):
+        """Test default messages when file is missing"""
+        # Configure file path to non-existent
+        self.test_config["messages_file"] = "nonexistent.txt"
+        bot = MastodonRSSBot(**self.test_config)
+
+        # Verify default message loaded
+        self.assertEqual(len(bot.sarcastic_messages), 1)
+        self.assertIn("bot", bot.sarcastic_messages[0])
+
+    @patch("bot.Mastodon")
+    def test_reply_to_mention_error(self, mock_mastodon):
+        """Test error handling during reply"""
+        mock_instance = Mock()
+        mock_mastodon.return_value = mock_instance
+        mock_instance.status_post.side_effect = Exception("API Error")
+
+        bot = MastodonRSSBot(**self.test_config)
+
+        notification = {"id": 1, "status": {"id": 99, "account": {"acct": "user"}}}
+
+        # Should not raise exception
+        bot.reply_to_mention(notification)
+
+        mock_instance.status_post.assert_called_once()
+
+    @patch("bot.Mastodon")
     def test_check_notifications(self, mock_mastodon):
         """Test checking notifications logic"""
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
-        
+
         # Mock notifications response
         mock_instance.notifications.return_value = [
-            {'id': 101, 'type': 'mention', 'status': {'id': 555, 'account': {'acct': 'user'}}}
+            {"id": 101, "type": "mention", "status": {"id": 555, "account": {"acct": "user"}}}
         ]
-        
+
         bot = MastodonRSSBot(**self.test_config)
-        
+
         # Set initial ID
         bot.last_notification_id = 100
-        
+
         # Run check
         bot.check_notifications()
-        
+
         # Verify
-        mock_instance.notifications.assert_called_with(types=['mention'], since_id=100)
+        mock_instance.notifications.assert_called_with(types=["mention"], since_id=100)
         mock_instance.status_post.assert_called()
         self.assertEqual(bot.last_notification_id, 101)
 
@@ -210,13 +237,13 @@ class TestMastodonRSSBot(unittest.TestCase):
         """Test initialization of notification ID"""
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
-        mock_instance.notifications.return_value = [{'id': 50}]
-        
+        mock_instance.notifications.return_value = [{"id": 50}]
+
         bot = MastodonRSSBot(**self.test_config)
         # last_notification_id is None by default
-        
+
         bot.check_notifications()
-        
+
         # Should populate ID but NOT reply
         self.assertEqual(bot.last_notification_id, 50)
         mock_instance.status_post.assert_not_called()
@@ -226,25 +253,19 @@ class TestMastodonRSSBot(unittest.TestCase):
         """Test replying to a mention"""
         mock_instance = Mock()
         mock_mastodon.return_value = mock_instance
-        
+
         bot = MastodonRSSBot(**self.test_config)
-        
-        notification = {
-            'id': 101,
-            'status': {
-                'id': 999,
-                'account': {'acct': 'testuser'}
-            }
-        }
-        
+
+        notification = {"id": 101, "status": {"id": 999, "account": {"acct": "testuser"}}}
+
         bot.reply_to_mention(notification)
-        
+
         # Verify reply
         mock_instance.status_post.assert_called_once()
         args, kwargs = mock_instance.status_post.call_args
         self.assertIn("@testuser", args[0])
-        self.assertEqual(kwargs['in_reply_to_id'], 999)
-        self.assertEqual(kwargs['visibility'], 'public')
+        self.assertEqual(kwargs["in_reply_to_id"], 999)
+        self.assertEqual(kwargs["visibility"], "public")
 
 
 class TestMainEntry(unittest.TestCase):
@@ -368,7 +389,6 @@ class TestMainEntry(unittest.TestCase):
         mock_bot_class.assert_called_once()
         _, kwargs = mock_bot_class.call_args
         self.assertEqual(kwargs["feed_urls"], ["http://feed1.com", "http://feed2.com"])
-
 
 
 if __name__ == "__main__":
