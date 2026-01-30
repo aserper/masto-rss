@@ -177,7 +177,74 @@ class TestMastodonRSSBot(unittest.TestCase):
 
             self.assertEqual(total, 3)
             self.assertEqual(mock_process.call_count, 2)
+            self.assertEqual(total, 3)
+            self.assertEqual(mock_process.call_count, 2)
             mock_save.assert_called_once()
+
+    @patch("bot.Mastodon")
+    def test_check_notifications(self, mock_mastodon):
+        """Test checking notifications logic"""
+        mock_instance = Mock()
+        mock_mastodon.return_value = mock_instance
+        
+        # Mock notifications response
+        mock_instance.notifications.return_value = [
+            {'id': 101, 'type': 'mention', 'status': {'id': 555, 'account': {'acct': 'user'}}}
+        ]
+        
+        bot = MastodonRSSBot(**self.test_config)
+        
+        # Set initial ID
+        bot.last_notification_id = 100
+        
+        # Run check
+        bot.check_notifications()
+        
+        # Verify
+        mock_instance.notifications.assert_called_with(types=['mention'], since_id=100)
+        mock_instance.status_post.assert_called()
+        self.assertEqual(bot.last_notification_id, 101)
+
+    @patch("bot.Mastodon")
+    def test_check_notifications_init(self, mock_mastodon):
+        """Test initialization of notification ID"""
+        mock_instance = Mock()
+        mock_mastodon.return_value = mock_instance
+        mock_instance.notifications.return_value = [{'id': 50}]
+        
+        bot = MastodonRSSBot(**self.test_config)
+        # last_notification_id is None by default
+        
+        bot.check_notifications()
+        
+        # Should populate ID but NOT reply
+        self.assertEqual(bot.last_notification_id, 50)
+        mock_instance.status_post.assert_not_called()
+
+    @patch("bot.Mastodon")
+    def test_reply_to_mention(self, mock_mastodon):
+        """Test replying to a mention"""
+        mock_instance = Mock()
+        mock_mastodon.return_value = mock_instance
+        
+        bot = MastodonRSSBot(**self.test_config)
+        
+        notification = {
+            'id': 101,
+            'status': {
+                'id': 999,
+                'account': {'acct': 'testuser'}
+            }
+        }
+        
+        bot.reply_to_mention(notification)
+        
+        # Verify reply
+        mock_instance.status_post.assert_called_once()
+        args, kwargs = mock_instance.status_post.call_args
+        self.assertIn("@testuser", args[0])
+        self.assertEqual(kwargs['in_reply_to_id'], 999)
+        self.assertEqual(kwargs['visibility'], 'public')
 
 
 class TestMainEntry(unittest.TestCase):
@@ -301,6 +368,7 @@ class TestMainEntry(unittest.TestCase):
         mock_bot_class.assert_called_once()
         _, kwargs = mock_bot_class.call_args
         self.assertEqual(kwargs["feed_urls"], ["http://feed1.com", "http://feed2.com"])
+
 
 
 if __name__ == "__main__":
