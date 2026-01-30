@@ -19,25 +19,43 @@ templates = [
 ]
 
 bot_intros = [
-    "I am a bot.", "Automated response:", "Beep boop.", "System message:",
-    "I am a script.", "This is code talking.", "Robotic reply:", "[BOT]:"
+    "I am a bot.",
+    "Automated response:",
+    "Beep boop.",
+    "System message:",
+    "I am a script.",
+    "This is code talking.",
+    "Robotic reply:",
+    "[BOT]:",
 ]
 
 actions = [
-    "ignoring", "deleting", "discarding", "archiving", "nullifying",
-    "dropping", "skipping", "passing over", "disregarding", "dumping"
+    "ignoring",
+    "deleting",
+    "discarding",
+    "archiving",
+    "nullifying",
+    "dropping",
+    "skipping",
+    "passing over",
+    "disregarding",
+    "dumping",
 ]
 
-nouns = [
-    "input", "comment", "reply", "thought", "feedback",
-    "statement", "text", "string", "data", "message"
-]
+nouns = ["input", "comment", "reply", "thought", "feedback", "statement", "text", "string", "data", "message"]
 
 reasons = [
-    "I only read RSS", "I have no soul", "I am just a script",
-    "I am not human", "I do not care", "I am automated",
-    "I run on electricity", "I am busy loop-waiting", "my logic gate is closed"
+    "I only read RSS",
+    "I have no soul",
+    "I am just a script",
+    "I am not human",
+    "I do not care",
+    "I am automated",
+    "I run on electricity",
+    "I am busy loop-waiting",
+    "my logic gate is closed",
 ]
+
 
 def generate_messages():
     messages = set()
@@ -57,13 +75,13 @@ def generate_messages():
         elif template_type == 2:
             msg = f"I am a bot. Your {random.choice(nouns)} has been received but {random.choice(reasons)}."
         else:
-        else:
             action = random.choice(actions).capitalize()
             msg = f"{random.choice(bot_intros)} {action} {random.choice(nouns)} because {random.choice(reasons)}."
 
         messages.add(msg)
 
     return list(messages)
+
 
 if __name__ == "__main__":
     msgs = generate_messages()
