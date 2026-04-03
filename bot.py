@@ -41,7 +41,6 @@ class MastodonRSSBot:
             feed_urls: List of URLs of the RSS/Atom feeds to monitor
             toot_visibility: Visibility level for posts ('public', 'unlisted', 'private', 'direct')
             check_interval: Seconds between feed checks
-            check_interval: Seconds between feed checks
             notification_check_interval: Seconds between notification checks
             enable_replies: Whether to enable sarcastic replies to mentions
             state_file: Path to file storing processed entry URLs
@@ -49,7 +48,6 @@ class MastodonRSSBot:
         """
         self.feed_urls = feed_urls
         self.toot_visibility = toot_visibility
-        self.check_interval = check_interval
         self.check_interval = check_interval
         self.notification_check_interval = notification_check_interval
         self.enable_replies = enable_replies
@@ -60,7 +58,7 @@ class MastodonRSSBot:
         self.sarcastic_messages = self.load_sarcastic_messages()
 
         # State for notification tracking
-        self.last_notification_id = None
+        self.last_notification_id: int | None = None
 
         # Initialize Mastodon client
         self.mastodon = Mastodon(
@@ -290,8 +288,8 @@ class MastodonRSSBot:
         """
         logger.info("Bot starting up...")
 
-        next_feed_check = 0
-        next_notification_check = 0
+        next_feed_check: float = 0.0
+        next_notification_check: float = 0.0
 
         while True:
             try:

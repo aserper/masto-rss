@@ -3,10 +3,10 @@ name = "masto-rss"
 version = "0.1.0"
 description = "A Mastodon RSS bot"
 dependencies = [
-    "feedparser>=6.0.10",
-    "Mastodon.py>=1.8.0",
-    "python-dateutil>=2.8.2",
-    "requests>=2.31.0",
+    "feedparser>=6.0.12",
+    "Mastodon.py>=2.1.4",
+    "python-dateutil>=2.9.0",
+    "requests>=2.33.0",
     # Added during uv migration, preserving logic from requirements.txt
 ]
 requires-python = ">=3.10"
@@ -14,11 +14,11 @@ requires-python = ">=3.10"
 [tool.uv]
 dev-dependencies = [
     "pytest>=9.0.2",
-    "pytest-cov>=6.0.0",
-    "pytest-mock>=3.14.0",
-    "ruff>=0.1.6",
-    "mypy>=1.19.0",
-    "coverage>=7.6.12",
+    "pytest-cov>=7.1.0",
+    "pytest-mock>=3.15.0",
+    "ruff>=0.15.0",
+    "mypy>=1.20.0",
+    "coverage>=7.13.0",
 ]
 
 [tool.ruff]
