@@ -7,13 +7,16 @@ dependencies = [
     "Mastodon.py>=2.1.4",
     "python-dateutil>=2.9.0",
     "requests>=2.33.0",
+    # Security fixes for CVEs
+    "urllib3>=2.7.0",
+    "pygments>=2.19.3",
     # Added during uv migration, preserving logic from requirements.txt
 ]
 requires-python = ">=3.10"
 
 [tool.uv]
 dev-dependencies = [
-    "pytest>=9.0.2",
+    "pytest>=9.0.3",
     "pytest-cov>=7.1.0",
     "pytest-mock>=3.15.0",
     "ruff>=0.15.0",
@@ -52,13 +55,13 @@ line-length = 127
 target-version = "py310"
 
 [tool.ruff.lint]
-# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
-# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
-# McCabe complexity (`C901`) by default.
+# Enable Pyflakes (F) and a subset of the pycodestyle (E)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (W) or
+# McCabe complexity (C901) by default.
 select = ["E", "F", "W", "C90"]
 ignore = []
 
-# Allow fix for all enabled rules (when `--fix`) is provided.
+# Allow fix for all enabled rules (when --fix) is provided.
 fixable = ["ALL"]
 unfixable = []
 
